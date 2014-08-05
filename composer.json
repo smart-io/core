@@ -1,0 +1,33 @@
+{
+    "name": "sinergi/core",
+    "require": {
+        "sinergi/config": "0.4.*",
+        "sinergi/dictionary": "0.1.*",
+        "sinergi/event": "0.3.*",
+        "sinergi/gearman": "0.5.*",
+        "sinergi/token": "0.1.*",
+        "sinergi/validation": "0.2.*",
+        "sinergi/registry": "0.1.*",
+        "klein/klein": "2.0.*",
+        "twig/twig": "1.15.*",
+        "symfony/console": "2.4.*",
+        "doctrine/orm": "2.*",
+        "psr/log": "~1",
+        "cocur/slugify": "0.8.*"
+    },
+    "require-dev": {
+        "facebook/xhprof": "dev-master",
+        "phpunit/phpunit": "~4",
+        "phpunit/dbunit": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "Sinergi\\Core\\": "src/Core"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Sinergi\\Core\\Tests\\": ["tests/Core/Tests", "tests/Core/Tests/_includes"]
+        }
+    }
+}

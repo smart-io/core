@@ -1,0 +1,32 @@
+language: php
+
+env:
+  - APP_ENV=travis
+
+php:
+  - 5.4
+  - 5.5
+  - 5.6
+  - hhvm
+
+before_script:
+  # gearman
+  - sudo apt-get remove gearman-job-server
+  - sudo apt-get install gearman-job-server libgearman-dev
+  - printf "\n"| pecl install gearman-1.0.3
+  ## Composer
+  - composer self-update
+  - composer install --prefer-source --no-interaction --dev
+  ## Database
+  - mysql -e 'create database my_dbname;'
+
+script:
+  - gearmand -d
+  - phpunit
+
+matrix:
+  allow_failures:
+    - php: hhvm
+
+notifications:
+  email: false
