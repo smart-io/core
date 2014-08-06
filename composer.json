@@ -2,8 +2,7 @@
     "name": "sinergi/core",
     "require": {
         "sinergi/config": "0.4.*",
-        "sinergi/dictionary": "0.1.*",
-        "sinergi/event": "0.3.*",
+        "sinergi/dictionary": "0.2.*",
         "sinergi/gearman": "0.5.*",
         "sinergi/token": "0.1.*",
         "sinergi/validation": "0.2.*",

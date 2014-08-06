@@ -49,6 +49,7 @@ abstract class App extends Application implements ApplicationInterface
     public function __construct()
     {
         $this->detectEnvironment();
+        $this->configure();
     }
 
     /**
@@ -56,8 +57,9 @@ abstract class App extends Application implements ApplicationInterface
      */
     protected function configure()
     {
-        $config = new Config($this->getRootDir() . DIRECTORY_SEPARATOR . $this->getConfigDir(), $this->getEnv());
-        $this->getRegistry()->setConfig($config);
+        $config = $this->getRegistry()->getConfig();
+        $config->setPath($this->getRootDir() . DIRECTORY_SEPARATOR . $this->getConfigDir());
+        $config->setEnvironment($this->getEnv());
         date_default_timezone_set($config->get('app.timezone'));
         $this->isConfigured = true;
         return $this;
@@ -95,10 +97,6 @@ abstract class App extends Application implements ApplicationInterface
             $runtime = $this->getRuntime();
         } else {
             $this->setRuntime($runtime);
-        }
-
-        if (!$this->isConfigured) {
-            $this->configure();
         }
 
         if ($runtime === self::RUNTIME_ROUTER) {

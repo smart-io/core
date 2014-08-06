@@ -69,6 +69,9 @@ trait ComponentRegistryTrait
      */
     public function getConfig()
     {
+        if (null === $this->getRegistry()->get('config')) {
+            $this->getRegistry()->set('config', new Config());
+        }
         return $this->getRegistry()->get('config');
     }
 

@@ -159,6 +159,32 @@ class EmailSender
      */
     public function send()
     {
+        $logger = $this->registry->getEmailLogger();
+
+        $headers = '';
+        $headers .= "To: {$this->getToName()} <{$this->getToEmail()}>\r\n";
+        $headers .= "From: {$this->getFromName()} <{$this->getFromEmail()}>\r\n";
+
+        if (mail($this->getToEmail(), $this->getSubject(), $this->getBody(), $headers)) {
+            $logger->info($this->getBody(), [
+                'subject' => $this->getSubject(),
+                'toName' => $this->getToName(),
+                'toEmail' => $this->getToEmail(),
+                'fromName' => $this->getFromName(),
+                'fromEmail' => $this->getFromEmail()
+            ]);
+            return true;
+        } else {
+            $this->errorMessage = 'Error: Please use something better than PHP mail function to send emails';
+            $logger->error($this->errorMessage, [
+                'subject' => $this->getSubject(),
+                'toName' => $this->getToName(),
+                'toEmail' => $this->getToEmail(),
+                'fromName' => $this->getFromName(),
+                'fromEmail' => $this->getFromEmail()
+            ]);
+            return false;
+        }
     }
 
     /**
