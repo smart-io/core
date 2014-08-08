@@ -1,5 +1,5 @@
 <?php
-namespace Sinergi\Core\Test;
+namespace Sinergi\Core\TestCase;
 
 use Sinergi\Core\RegistryInterface;
 

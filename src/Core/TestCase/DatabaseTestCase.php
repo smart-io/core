@@ -1,5 +1,5 @@
 <?php
-namespace Sinergi\Core\Test;
+namespace Sinergi\Core\TestCase;
 
 use Doctrine\ORM\Tools\SchemaTool;
 use PHPUnit_Extensions_Database_DataSet_CompositeDataSet;
