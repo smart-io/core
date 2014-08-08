@@ -71,7 +71,7 @@ class Gearman
         $config = $this->registry->getConfig();
 
         return (new Config())
-            ->setBootstrap($this->registry->getApp()->getRootDir() . '/bootstrap/gearman.php')
+            ->setBootstrap($this->registry->getApp()->getRootDir() . '/bin/gearman.php')
             ->addServers($config->get('gearman.servers'))
             ->setUser($config->get('gearman.user'))
             ->setAutoUpdate($config->get('gearman.auto_update'));

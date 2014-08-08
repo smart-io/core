@@ -6,7 +6,7 @@ use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
 use Doctrine\ORM\Tools\Setup;
-use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Command\Command as DoctrineCommand;
 use Symfony\Component\Console\Helper\HelperSet;
 
 class Doctrine
@@ -29,7 +29,7 @@ class Doctrine
     private $helperSet;
 
     /**
-     * @var Command[]
+     * @var DoctrineCommand[]
      */
     private $commands;
 
@@ -54,10 +54,10 @@ class Doctrine
     }
 
     /**
-     * @param Command $command
+     * @param DoctrineCommand $command
      * @return $this
      */
-    public function addCommand(Command $command)
+    public function addCommand(DoctrineCommand $command)
     {
         if (null === $this->commands) {
             $this->addDefaultCommands();
