@@ -8,6 +8,7 @@ use Doctrine\ORM\Tools\Console\ConsoleRunner;
 use Doctrine\ORM\Tools\Setup;
 use Symfony\Component\Console\Command\Command as DoctrineCommand;
 use Symfony\Component\Console\Helper\HelperSet;
+use Exception;
 
 class Doctrine
 {
@@ -129,6 +130,7 @@ class Doctrine
     /**
      * @param string $name
      * @return EntityManager|null
+     * @throws Exception
      */
     public function createEntityManager($name = self::DEFAULT_ENTITY_MANAGER)
     {
@@ -137,7 +139,13 @@ class Doctrine
         }
 
         $config = $this->registry->getConfig()->get('doctrine');
-        $conn = $config['connections'][$name];
+        if (isset($config['connections'][$name])) {
+            $conn = $config['connections'][$name];
+        } elseif (isset($config['connections'][self::DEFAULT_ENTITY_MANAGER])) {
+            $conn = $config['connections'][self::DEFAULT_ENTITY_MANAGER];
+        } else {
+            throw new Exception("There are no entity manager configurations");
+        }
 
         if ($conn) {
             if (isset($conn['is_dev_mode'])) {
