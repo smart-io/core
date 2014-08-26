@@ -172,59 +172,57 @@ class Doctrine extends AbstractManagerRegistry
             $name = self::DEFAULT_ENTITY_MANAGER;
         }
 
-        $config = $this->registry->getConfig()->get('doctrine');
-        if (isset($config['connections'][$name])) {
-            $conn = $config['connections'][$name];
-        } elseif (isset($config['connections'][self::DEFAULT_ENTITY_MANAGER])) {
-            $conn = $config['connections'][self::DEFAULT_ENTITY_MANAGER];
+        $config = $this->registry->getConfig();
+
+        if ($config->get("doctrine.connections.{$name}")) {
+            $connectionConfig = $config->get("doctrine.connections.{$name}");
+        } elseif ($config->get("doctrine.connections." . self::DEFAULT_ENTITY_MANAGER)) {
+            $connectionConfig = $config->get("doctrine.connections." . self::DEFAULT_ENTITY_MANAGER);
         } else {
             throw new Exception("There are no entity manager configurations");
         }
 
-        if ($conn) {
-            if (isset($conn['is_dev_mode'])) {
-                $isDevMode = (bool)$conn['is_dev_mode'];
-            } else {
-                $isDevMode = false;
-            }
-
-            $doctrineConfig = Setup::createAnnotationMetadataConfiguration(
-                $conn['metadata'],
-                $isDevMode
-            );
-
-            if (isset($conn['cache'])) {
-                switch ($conn['cache']) {
-                    case 'apc':
-                        $cache = new ApcCache;
-                        $doctrineConfig->setQueryCacheImpl($cache);
-                        $doctrineConfig->setMetadataCacheImpl($cache);
-                        break;
-                    case 'array':
-                        $cache = new ArrayCache;
-                        $doctrineConfig->setQueryCacheImpl($cache);
-                        $doctrineConfig->setMetadataCacheImpl($cache);
-                        break;
-                }
-            }
-
-            if (isset($conn['proxy_dir'])) {
-                $doctrineConfig->setProxyDir($conn['proxy_dir']);
-                if (isset($conn['proxy_namespace'])) {
-                    $doctrineConfig->setProxyNamespace($conn['proxy_namespace']);
-                } else {
-                    $doctrineConfig->setProxyNamespace('Proxies');
-                }
-            }
-
-            $em = EntityManager::create($conn, $doctrineConfig);
-
-            $conn = $em->getConnection();
-            $conn->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
-
-            $this->addListeners($em);
-            return $em;
+        if (isset($connectionConfig['is_dev_mode'])) {
+            $isDevMode = (bool)$connectionConfig['is_dev_mode'];
+        } else {
+            $isDevMode = false;
         }
-        return null;
+
+        $doctrineConfig = Setup::createAnnotationMetadataConfiguration(
+            $connectionConfig['metadata'],
+            $isDevMode
+        );
+
+        if (isset($connectionConfig['cache'])) {
+            switch ($connectionConfig['cache']) {
+                case 'apc':
+                    $cache = new ApcCache;
+                    $doctrineConfig->setQueryCacheImpl($cache);
+                    $doctrineConfig->setMetadataCacheImpl($cache);
+                    break;
+                case 'array':
+                    $cache = new ArrayCache;
+                    $doctrineConfig->setQueryCacheImpl($cache);
+                    $doctrineConfig->setMetadataCacheImpl($cache);
+                    break;
+            }
+        }
+
+        if (isset($connectionConfig['proxy_dir'])) {
+            $doctrineConfig->setProxyDir($connectionConfig['proxy_dir']);
+            if (isset($connectionConfig['proxy_namespace'])) {
+                $doctrineConfig->setProxyNamespace($connectionConfig['proxy_namespace']);
+            } else {
+                $doctrineConfig->setProxyNamespace('Proxies');
+            }
+        }
+
+        $entityManager = EntityManager::create($connectionConfig, $doctrineConfig);
+
+        $connection = $entityManager->getConnection();
+        $connection->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
+
+        $this->addListeners($entityManager);
+        return $entityManager;
     }
 }
