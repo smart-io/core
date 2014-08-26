@@ -58,17 +58,6 @@ interface RegistryInterface
     public function getConfig();
 
     /**
-     * @return EventDispatcher
-     */
-    public function getEventDispatcher();
-
-    /**
-     * @param EventDispatcher $eventDispatcher
-     * @return $this
-     */
-    public function setEventDispatcher(EventDispatcher $eventDispatcher);
-
-    /**
      * @param Dictionary $dictionary
      * @return $this
      */
@@ -149,17 +138,6 @@ interface RegistryInterface
      * @return Language
      */
     public function getLanguage();
-
-    /**
-     * @return LoggerInterface
-     */
-    public function getEmailLogger();
-
-    /**
-     * @param LoggerInterface $emailLogger
-     * @return $this
-     */
-    public function setEmailLogger(LoggerInterface $emailLogger);
 
     /**
      * @return LoggerInterface

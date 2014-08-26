@@ -86,27 +86,6 @@ trait ComponentRegistryTrait
     }
 
     /**
-     * @return EventDispatcher
-     */
-    public function getEventDispatcher()
-    {
-        if (null === $this->getRegistry()->get('eventDispatcher')) {
-            $this->getRegistry()->set('eventDispatcher', new EventDispatcher());
-        }
-        return $this->getRegistry()->get('eventDispatcher');
-    }
-
-    /**
-     * @param EventDispatcher $eventDispatcher
-     * @return $this
-     */
-    public function setEventDispatcher(EventDispatcher $eventDispatcher)
-    {
-        $this->getRegistry()->set('eventDispatcher', $eventDispatcher);
-        return $this;
-    }
-
-    /**
      * @return Dictionary
      */
     public function getDictionary()
@@ -261,27 +240,6 @@ trait ComponentRegistryTrait
     public function setLanguage(Language $language)
     {
         $this->getRegistry()->set('language', $language);
-        return $this;
-    }
-
-    /**
-     * @return LoggerInterface
-     */
-    public function getEmailLogger()
-    {
-        if (null === $this->getRegistry()->get('emailLogger')) {
-            $this->getRegistry()->set('emailLogger', new EmailLogger($this->getRegistry()));
-        }
-        return $this->getRegistry()->get('emailLogger');
-    }
-
-    /**
-     * @param LoggerInterface $emailLogger
-     * @return $this
-     */
-    public function setEmailLogger(LoggerInterface $emailLogger)
-    {
-        $this->getRegistry()->set('emailLogger', $emailLogger);
         return $this;
     }
 

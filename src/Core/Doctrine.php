@@ -3,14 +3,16 @@ namespace Sinergi\Core;
 
 use Doctrine\Common\Cache\ApcCache;
 use Doctrine\Common\Cache\ArrayCache;
+use Doctrine\Common\Persistence\AbstractManagerRegistry;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\ORMException;
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
 use Doctrine\ORM\Tools\Setup;
 use Symfony\Component\Console\Command\Command as DoctrineCommand;
 use Symfony\Component\Console\Helper\HelperSet;
 use Exception;
 
-class Doctrine
+class Doctrine extends AbstractManagerRegistry
 {
     const DEFAULT_ENTITY_MANAGER = 'default';
 
@@ -40,6 +42,37 @@ class Doctrine
     public function __construct(RegistryInterface $registry)
     {
         $this->registry = $registry;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getService($name)
+    {
+        return $this->getEntityManager($name);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function resetService($name)
+    {
+        return null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAliasNamespace($alias)
+    {
+        foreach ($this->entityManagers as $entityManager) {
+            try {
+                return $entityManager->getConfiguration()->getEntityNamespace($alias);
+            } catch (ORMException $e) {
+            }
+        }
+
+        throw ORMException::unknownEntityNamespace($alias);
     }
 
     /**
@@ -79,12 +112,13 @@ class Doctrine
     }
 
     /**
+     * @param string $name
      * @return HelperSet
      */
-    public function getHelperSet()
+    public function getHelperSet($name = self::DEFAULT_ENTITY_MANAGER)
     {
         if (null === $this->helperSet) {
-            $this->helperSet = ConsoleRunner::createHelperSet($this->getEntityManager());
+            $this->helperSet = ConsoleRunner::createHelperSet($this->getEntityManager($name));
         }
         return $this->helperSet;
     }
