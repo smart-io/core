@@ -13,8 +13,7 @@
         "twig/twig": "1.15.*",
         "symfony/console": "2.4.*",
         "doctrine/orm": "2.*",
-        "psr/log": "~1",
-        "cocur/slugify": "0.8.*"
+        "psr/log": "~1"
     },
     "require-dev": {
         "facebook/xhprof": "dev-master",
