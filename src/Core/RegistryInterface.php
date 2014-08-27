@@ -8,7 +8,6 @@ use Klein\Response;
 use Psr\Log\LoggerInterface;
 use Sinergi\Config\Config;
 use Sinergi\Dictionary\Dictionary;
-use Sinergi\Event\Dispatcher as EventDispatcher;
 use Sinergi\Gearman\Dispatcher as GearmanDispatcher;
 use SmartData\SmartData\SmartData;
 use Symfony\Component\Console\Application as ConsoleApplication;
@@ -18,6 +17,8 @@ interface RegistryInterface
     public function get($key, $default = null);
 
     public function set($key, $value);
+
+    public function jsonSerialize();
 
     /**
      * @return App

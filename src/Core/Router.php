@@ -2,10 +2,21 @@
 namespace Sinergi\Core;
 
 use Sinergi\Core\Registry\ComponentRegistryTrait;
+use Klein\AbstractResponse;
 
 abstract class Router implements RouterInterface
 {
     use ComponentRegistryTrait;
+
+    /**
+     * @param string $url
+     * @param int $code
+     * @return AbstractResponse
+     */
+    public function redirect($url, $code = 302)
+    {
+        return $this->getResponse()->redirect($url, $code);
+    }
 
     /**
      * @param $key

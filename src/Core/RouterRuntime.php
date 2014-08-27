@@ -17,8 +17,6 @@ class RouterRuntime implements RuntimeInterface
     public function __construct(RegistryInterface $registry)
     {
         $this->registry = $registry;
-        $this->registry->setRequest(Request::createFromGlobals());
-        $this->registry->setResponse(new Response());
     }
 
     public function configure()

@@ -76,6 +76,8 @@ class Twig
             $twig->addExtension(new Twig_Extension_Debug());
         }
 
+        $twig->addExtension(new RegistryTwigExtension($this->registry));
+
         return $twig;
     }
 }

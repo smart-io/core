@@ -10,7 +10,7 @@ abstract class App extends Application implements ApplicationInterface
     /**
      * @return RegistryInterface
      */
-    abstract function getRegistry();
+    abstract protected function getRegistry();
 
     const ENV_TEST = 'test';
     const ENV_DEV = 'dev';

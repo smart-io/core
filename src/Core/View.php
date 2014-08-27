@@ -10,17 +10,22 @@ abstract class View
     /**
      * @return Request
      */
-    abstract function getRequest();
+    abstract public function getRequest();
 
     /**
      * @return Response
      */
-    abstract function getResponse();
+    abstract public function getResponse();
 
     /**
      * @return Twig
      */
-    abstract function getTwig();
+    abstract public function getTwig();
+
+    /**
+     * @return RegistryInterface
+     */
+    abstract public function getRegistry();
 
     use ComponentRegistryTrait;
 
@@ -106,7 +111,10 @@ abstract class View
      */
     public function render($name, array $context = [])
     {
-        return $this->getTwig()->getEnvironment()->render($name, $context);
+        return $this->getTwig()->getEnvironment()->render(
+            $name,
+            $context
+        );
     }
 
     /**

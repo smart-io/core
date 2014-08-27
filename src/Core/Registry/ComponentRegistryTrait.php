@@ -17,7 +17,6 @@ use Sinergi\Core\Registry;
 use Sinergi\Core\RegistryInterface;
 use Sinergi\Core\Twig;
 use Sinergi\Dictionary\Dictionary;
-use Sinergi\Event\Dispatcher as EventDispatcher;
 use Sinergi\Gearman\Dispatcher as GearmanDispatcher;
 use Symfony\Component\Console\Application as ConsoleApplication;
 
@@ -33,6 +32,9 @@ trait ComponentRegistryTrait
      */
     public function getRequest()
     {
+        if (null === $this->getRegistry()->get('request')) {
+            $this->getRegistry()->set('request', Request::createFromGlobals());
+        }
         return $this->getRegistry()->get('request');
     }
 
@@ -51,6 +53,9 @@ trait ComponentRegistryTrait
      */
     public function getResponse()
     {
+        if (null === $this->getRegistry()->get('response')) {
+            $this->getRegistry()->set('response', new Response());
+        }
         return $this->getRegistry()->get('response');
     }
 
