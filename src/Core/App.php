@@ -60,7 +60,13 @@ abstract class App extends Application implements ApplicationInterface
         $config = $this->getRegistry()->getConfig();
         $config->setPath($this->getRootDir() . DIRECTORY_SEPARATOR . $this->getConfigDir());
         $config->setEnvironment($this->getEnv());
-        date_default_timezone_set($config->get('app.timezone'));
+        if ($config->get('app.timezone')) {
+            date_default_timezone_set($config->get('app.timezone'));
+        }
+        if ($config->get('app.debug')) {
+            error_reporting(E_ALL);
+            ini_set('display_errors', "On");
+        }
         $this->isConfigured = true;
         return $this;
     }
