@@ -111,9 +111,13 @@ abstract class App extends Application implements ApplicationInterface
             $runtime = new TestRuntime($this->getRegistry());
         }
 
-        $runtime->configure();
+        if ($runtime) {
+            $runtime->configure();
+        }
         $this->run();
-        $runtime->run();
+        if ($runtime) {
+            $runtime->run();
+        }
 
         return $this;
     }
