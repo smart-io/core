@@ -33,4 +33,13 @@ class RegistryTwigGlobal
         $service = call_user_func([$this->registry, $this->service]);
         return call_user_func_array([$service, $name], $arguments);
     }
+
+    public function __toString()
+    {
+        $object = call_user_func([$this->registry, $this->service]);
+        if (is_object($object)) {
+            return (string)$object;
+        }
+        return null;
+    }
 }

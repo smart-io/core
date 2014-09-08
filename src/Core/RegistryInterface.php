@@ -130,17 +130,6 @@ interface RegistryInterface
     public function getDoctrine();
 
     /**
-     * @param Language $language
-     * @return $this
-     */
-    public function setLanguage(Language $language);
-
-    /**
-     * @return Language
-     */
-    public function getLanguage();
-
-    /**
      * @return LoggerInterface
      */
     public function getGearmanLogger();

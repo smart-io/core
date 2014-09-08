@@ -21,11 +21,17 @@ class Language
     private $languages;
 
     /**
+     * @var string
+     */
+    private $defaultLanguage;
+
+    /**
      * @param Config $config
      */
     public function __construct(Config $config)
     {
         $this->setConfig($config);
+        $this->setDefaultLanguage($config->get('language.default'));
         $this->setLanguage($config->get('language.default'));
         $languages = $config->get('language.languages');
         $this->setLanguages($languages);
@@ -47,6 +53,32 @@ class Language
     public function getConfig()
     {
         return $this->config;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDefaultLanguage()
+    {
+        return $this->defaultLanguage;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDefaultShortLanguage()
+    {
+        return substr($this->defaultLanguage, 0, 2);
+    }
+
+    /**
+     * @param string $defaultLanguage
+     * @return $this
+     */
+    public function setDefaultLanguage($defaultLanguage)
+    {
+        $this->defaultLanguage = $defaultLanguage;
+        return $this;
     }
 
     /**
@@ -86,10 +118,22 @@ class Language
     }
 
     /**
+     * @return array
+     */
+    public function getShortLanguages()
+    {
+        $array = $this->languages;
+        foreach ($array as $key => $value) {
+            $array[$key] = substr($value, 0, 2);
+        }
+        return $array;
+    }
+
+    /**
      * @return string
      */
     public function __toString()
     {
-        return $this->language;
+        return substr($this->language, 0, 2);
     }
 }

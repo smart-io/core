@@ -17,6 +17,11 @@ class Doctrine extends AbstractManagerRegistry
     const DEFAULT_ENTITY_MANAGER = 'default';
 
     /**
+     * @var string
+     */
+    private $defautName = self::DEFAULT_ENTITY_MANAGER;
+
+    /**
      * @var EntityManager[]
      */
     private $entityManagers;
@@ -42,6 +47,10 @@ class Doctrine extends AbstractManagerRegistry
     public function __construct(RegistryInterface $registry)
     {
         $this->registry = $registry;
+        $config = $this->registry->getConfig();
+        if ($defautName = $config->get('doctrine.default')) {
+            $this->defautName = $defautName;
+        }
     }
 
     /**
@@ -115,8 +124,12 @@ class Doctrine extends AbstractManagerRegistry
      * @param string $name
      * @return HelperSet
      */
-    public function getHelperSet($name = self::DEFAULT_ENTITY_MANAGER)
+    public function getHelperSet($name = null)
     {
+        if (null === $name) {
+            $name = $this->getDefautName();
+        }
+
         if (null === $this->helperSet) {
             $this->helperSet = ConsoleRunner::createHelperSet($this->getEntityManager($name));
         }
@@ -128,10 +141,10 @@ class Doctrine extends AbstractManagerRegistry
      * @param EntityManager $entityManager
      * @return $this
      */
-    public function setEntityManager($name = self::DEFAULT_ENTITY_MANAGER, EntityManager $entityManager)
+    public function setEntityManager($name = null, EntityManager $entityManager)
     {
-        if ($name === null) {
-            $name = self::DEFAULT_ENTITY_MANAGER;
+        if (null === $name) {
+            $name = $this->getDefautName();
         }
 
         $this->entityManagers[$name] = $entityManager;
@@ -142,10 +155,10 @@ class Doctrine extends AbstractManagerRegistry
      * @param string $name
      * @return EntityManager|null
      */
-    public function getEntityManager($name = self::DEFAULT_ENTITY_MANAGER)
+    public function getEntityManager($name = null)
     {
-        if ($name === null) {
-            $name = self::DEFAULT_ENTITY_MANAGER;
+        if (null === $name) {
+            $name = $this->getDefautName();
         }
 
         if (isset($this->entityManagers[$name])) {
@@ -162,22 +175,30 @@ class Doctrine extends AbstractManagerRegistry
     }
 
     /**
+     * @return string
+     */
+    private function getDefautName()
+    {
+        return $this->defautName;
+    }
+
+    /**
      * @param string $name
      * @return EntityManager|null
      * @throws Exception
      */
-    public function createEntityManager($name = self::DEFAULT_ENTITY_MANAGER)
+    public function createEntityManager($name = null)
     {
-        if ($name === null) {
-            $name = self::DEFAULT_ENTITY_MANAGER;
+        if (null === $name) {
+            $name = $this->getDefautName();
         }
 
         $config = $this->registry->getConfig();
 
         if ($config->get("doctrine.connections.{$name}")) {
             $connectionConfig = $config->get("doctrine.connections.{$name}");
-        } elseif ($config->get("doctrine.connections." . self::DEFAULT_ENTITY_MANAGER)) {
-            $connectionConfig = $config->get("doctrine.connections." . self::DEFAULT_ENTITY_MANAGER);
+        } elseif ($config->get("doctrine.connections." . $this->getDefautName())) {
+            $connectionConfig = $config->get("doctrine.connections." . $this->getDefautName());
         } else {
             throw new Exception("There are no entity manager configurations");
         }

@@ -8,7 +8,6 @@ use Klein\Response;
 use Psr\Log\LoggerInterface;
 use Sinergi\Config\Config;
 use Sinergi\Core\Doctrine;
-use Sinergi\Core\EmailLogger;
 use Sinergi\Core\ErrorLogger;
 use Sinergi\Core\Gearman;
 use Sinergi\Core\GearmanLogger;
@@ -91,6 +90,27 @@ trait ComponentRegistryTrait
     }
 
     /**
+     * @return Language
+     */
+    public function getLanguage()
+    {
+        if (!$this->getRegistry()->get('language')) {
+            $this->getRegistry()->set('language', new Language($this->getRegistry()->getConfig()));
+        }
+        return $this->getRegistry()->get('language');
+    }
+
+    /**
+     * @param Language $language
+     * @return $this
+     */
+    public function setLanguage(Language $language)
+    {
+        $this->getRegistry()->set('language', $language);
+        return $this;
+    }
+
+    /**
      * @return Dictionary
      */
     public function getDictionary()
@@ -98,7 +118,7 @@ trait ComponentRegistryTrait
         if (null === $this->getRegistry()->get('dictionary')) {
             $config = $this->getConfig()->get('dictionary');
             $dictionary = (new Dictionary())->setStorage($config['storage']);
-            $dictionary->setLanguage((string)$this->getLanguage());
+            $dictionary->setLanguage($this->getLanguage()->getLanguage());
             $this->getRegistry()->set('dictionary', $dictionary);
         }
         return $this->getRegistry()->get('dictionary');
@@ -224,27 +244,6 @@ trait ComponentRegistryTrait
     public function setDoctrine(Doctrine $doctrine)
     {
         $this->getRegistry()->set('doctrine', $doctrine);
-        return $this;
-    }
-
-    /**
-     * @return Language
-     */
-    public function getLanguage()
-    {
-        if (null === $this->getRegistry()->get('language')) {
-            $this->getRegistry()->set('language', new Language($this->getConfig()));
-        }
-        return $this->getRegistry()->get('language');
-    }
-
-    /**
-     * @param Language $language
-     * @return $this
-     */
-    public function setLanguage(Language $language)
-    {
-        $this->getRegistry()->set('language', $language);
         return $this;
     }
 
