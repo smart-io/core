@@ -5,7 +5,7 @@
         "sinergi/dictionary": "0.2.*",
         "sinergi/gearman": "0.5.*",
         "sinergi/registry": "0.1.*",
-        "klein/klein": "2.0.*",
+        "klein/klein": "dev-master",
         "twig/twig": "1.15.*",
         "symfony/console": "2.4.*",
         "doctrine/orm": "2.*",
