@@ -238,6 +238,9 @@ class Doctrine extends AbstractManagerRegistry
             }
         }
 
+        if (!isset($connectionConfig['charset'])) {
+            $connectionConfig['charset'] = 'utf8';
+        }
         $entityManager = EntityManager::create($connectionConfig, $doctrineConfig);
 
         $connection = $entityManager->getConnection();

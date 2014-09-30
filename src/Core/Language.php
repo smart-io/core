@@ -132,6 +132,14 @@ class Language
     /**
      * @return string
      */
+    public function getShortCode()
+    {
+        return substr($this->language, 0, 2);
+    }
+
+    /**
+     * @return string
+     */
     public function __toString()
     {
         return substr($this->language, 0, 2);

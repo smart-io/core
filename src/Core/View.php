@@ -41,10 +41,24 @@ abstract class View
     /**
      * @param mixed $object
      * @param string $jsonp_prefix
+     * @param null|array $mask
      * @return void
      */
-    public function json($object, $jsonp_prefix = null)
+    public function json($object, $jsonp_prefix = null, array $mask = null)
     {
+        $json = json_encode($object);
+        $object = json_decode($json, true);
+        if (null !== $mask) {
+            $retval = [];
+            foreach ($mask as $oldKey => $key) {
+                if (is_string($oldKey)) {
+                    $retval[$key] = isset($object[$oldKey]) ? $object[$oldKey] : null;
+                } else {
+                    $retval[$key] = isset($object[$key]) ? $object[$key] : null;
+                }
+            }
+            $object = $retval;
+        }
         $this->getResponse()->json($object, $jsonp_prefix);
     }
 
