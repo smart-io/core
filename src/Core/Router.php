@@ -3,6 +3,7 @@ namespace Sinergi\Core;
 
 use Sinergi\Core\Registry\ComponentRegistryTrait;
 use Klein\AbstractResponse;
+use Klein\Response;
 
 abstract class Router implements RouterInterface
 {
@@ -61,10 +62,14 @@ abstract class Router implements RouterInterface
         if (null !== $mask) {
             $retval = [];
             foreach ($mask as $oldKey => $key) {
-                if (is_string($oldKey)) {
-                    $retval[$key] = isset($params[$oldKey]) ? $params[$oldKey] : null;
+                if ((is_int($oldKey) || is_string($oldKey)) && (is_int($key) || is_string($key))) {
+                    if (is_string($oldKey)) {
+                        $retval[$key] = isset($params[$oldKey]) ? $params[$oldKey] : null;
+                    } else {
+                        $retval[$key] = isset($params[$key]) ? $params[$key] : null;
+                    }
                 } else {
-                    $retval[$key] = isset($params[$key]) ? $params[$key] : null;
+                    $retval[$oldKey] = $key;
                 }
             }
         }
