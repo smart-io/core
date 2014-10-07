@@ -7,7 +7,7 @@
         "sinergi/registry": "0.1.*",
         "klein/klein": "dev-master",
         "twig/twig": "1.15.*",
-        "symfony/console": "2.4.*",
+        "symfony/console": "2.5.*",
         "doctrine/orm": "2.*",
         "psr/log": "~1"
     },
