@@ -12,6 +12,7 @@ use Doctrine\ORM\Cache\CacheFactory;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\ORM\Mapping\DefaultQuoteStrategy;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Doctrine\ORM\ORMException;
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
@@ -313,6 +314,8 @@ class Doctrine extends AbstractManagerRegistry
         $doctrineConfig->setMetadataDriverImpl(
             new AnnotationDriver(new AnnotationReader(), $connectionConfig['paths'])
         );
+
+        $doctrineConfig->setQuoteStrategy(new DefaultQuoteStrategy());
 
         if (isset($connectionConfig['cache'])) {
             switch ($connectionConfig['cache']) {
