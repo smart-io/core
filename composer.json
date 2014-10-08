@@ -25,12 +25,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Eatnow\\Core\\": "src/Core"
+            "Sinergi\\Core\\": "src/Core"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Eatnow\\Core\\Tests\\": ["tests/Core/Tests", "tests/Core/Tests/_includes"]
+            "Sinergi\\Core\\Tests\\": ["tests/Core/Tests", "tests/Core/Tests/_includes"]
         }
     }
 }
