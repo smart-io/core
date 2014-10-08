@@ -2,6 +2,9 @@
 namespace Sinergi\Core\Registry;
 
 use Doctrine\ORM\EntityManager;
+use Sinergi\Core\Annotation;
+use Sinergi\Core\Predis;
+use Sinergi\Core\Serializer;
 use Klein\Klein;
 use Klein\Request;
 use Klein\Response;
@@ -244,6 +247,69 @@ trait ComponentRegistryTrait
     public function setDoctrine(Doctrine $doctrine)
     {
         $this->getRegistry()->set('doctrine', $doctrine);
+        return $this;
+    }
+
+    /**
+     * @return Predis
+     */
+    public function getPredis()
+    {
+        if (null === $this->getRegistry()->get('predis')) {
+            $this->getRegistry()->set('predis', new Predis($this->getRegistry()));
+        }
+        return $this->getRegistry()->get('predis');
+    }
+
+    /**
+     * @param Predis $predis
+     * @return $this
+     */
+    public function setPredis(Predis $predis)
+    {
+        $this->getRegistry()->set('predis', $predis);
+        return $this;
+    }
+
+    /**
+     * @return Annotation
+     */
+    public function getAnnotation()
+    {
+        if (!$annotation = $this->getRegistry()->get('annotation')) {
+            $this->getRegistry()->set('annotation', $annotation = new Annotation($this->getRegistry()));
+        }
+        return $annotation;
+    }
+
+    /**
+     * @param Annotation $annotation
+     * @return $this
+     */
+    public function setAnnotation(Annotation $annotation)
+    {
+        $this->getRegistry()->set('annotation', $annotation);
+        return $this;
+    }
+
+    /**
+     * @return Serializer
+     */
+    public function getSerializer()
+    {
+        if (!$serializer = $this->getRegistry()->get('serializer')) {
+            $this->getRegistry()->set('serializer', $serializer = new Serializer($this->getRegistry()));
+        }
+        return $serializer;
+    }
+
+    /**
+     * @param Serializer $serializer
+     * @return $this
+     */
+    public function setSerializer(Serializer $serializer)
+    {
+        $this->getRegistry()->set('serializer', $serializer);
         return $this;
     }
 

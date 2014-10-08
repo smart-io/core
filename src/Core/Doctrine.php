@@ -1,16 +1,28 @@
 <?php
 namespace Sinergi\Core;
 
+use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Cache\ApcCache;
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Persistence\AbstractManagerRegistry;
+use Doctrine\ORM\Cache\DefaultCacheFactory;
+use Doctrine\ORM\Cache\RegionsConfiguration;
+use Doctrine\ORM\Cache\CacheFactory;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Doctrine\ORM\ORMException;
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
 use Doctrine\ORM\Tools\Setup;
+use Sinergi\Core\BackgroundPersister\BackgroundPersister;
+use Sinergi\Core\Doctrine\CacheLogger;
 use Symfony\Component\Console\Command\Command as DoctrineCommand;
 use Symfony\Component\Console\Helper\HelperSet;
 use Exception;
+use Doctrine\Common\Cache\Cache;
+use Sinergi\Core\Doctrine\SqlLogger;
 
 class Doctrine extends AbstractManagerRegistry
 {
@@ -42,6 +54,36 @@ class Doctrine extends AbstractManagerRegistry
     private $commands;
 
     /**
+     * @var BackgroundPersister
+     */
+    private $backgroundPersister;
+
+    /**
+     * @var SqlLogger
+     */
+    private $sqlLogger;
+
+    /**
+     * @var Cache
+     */
+    private $cache;
+
+    /**
+     * @var CacheFactory
+     */
+    private $cacheFactory;
+
+    /**
+     * @var CacheLogger
+     */
+    private $cacheLogger;
+
+    /**
+     * @var RegionsConfiguration
+     */
+    private $regionsConfiguration;
+
+    /**
      * @param RegistryInterface $registry
      */
     public function __construct(RegistryInterface $registry)
@@ -51,6 +93,62 @@ class Doctrine extends AbstractManagerRegistry
         if ($defautName = $config->get('doctrine.default')) {
             $this->defautName = $defautName;
         }
+    }
+
+    /**
+     * @param EntityManagerInterface $entityManager
+     * @param $entity
+     * @return bool|null
+     */
+    public function persistBackground(EntityManagerInterface $entityManager, $entity)
+    {
+        if (null === $this->backgroundPersister) {
+            $this->backgroundPersister = new BackgroundPersister($this->registry);
+        }
+        $this->backgroundPersister->persist($entityManager, $entity);
+        return true;
+    }
+
+    /**
+     * @param EntityManagerInterface $entityManager
+     * @param $entity
+     * @return bool|null
+     */
+    public function mergeBackground(EntityManagerInterface $entityManager, $entity)
+    {
+        if (null === $this->backgroundPersister) {
+            $this->backgroundPersister = new BackgroundPersister($this->registry);
+        }
+        $this->backgroundPersister->merge($entityManager, $entity);
+        return true;
+    }
+
+    /**
+     * @param EntityManagerInterface $entityManager
+     * @param $entity
+     * @return bool|null
+     */
+    public function mergeOrPersistBackground(EntityManagerInterface $entityManager, $entity)
+    {
+        if (null === $this->backgroundPersister) {
+            $this->backgroundPersister = new BackgroundPersister($this->registry);
+        }
+        $this->backgroundPersister->mergeOrPersist($entityManager, $entity);
+        return true;
+    }
+
+    /**
+     * @param EntityManagerInterface $entityManager
+     * @return null|string
+     */
+    public function getEntityManagerKey(EntityManagerInterface $entityManager)
+    {
+        foreach ($this->entityManagers as $entityManagerKey => $entityManagerObject) {
+            if ($entityManager === $entityManagerObject) {
+                return $entityManagerKey;
+            }
+        }
+        return null;
     }
 
     /**
@@ -141,7 +239,7 @@ class Doctrine extends AbstractManagerRegistry
      * @param EntityManager $entityManager
      * @return $this
      */
-    public function setEntityManager($name = null, EntityManager $entityManager)
+    public function setEntityManager($name = null, EntityManager $entityManager = null)
     {
         if (null === $name) {
             $name = $this->getDefautName();
@@ -186,6 +284,7 @@ class Doctrine extends AbstractManagerRegistry
      * @param string $name
      * @return EntityManager|null
      * @throws Exception
+     * todo: split into chunks
      */
     public function createEntityManager($name = null)
     {
@@ -209,23 +308,48 @@ class Doctrine extends AbstractManagerRegistry
             $isDevMode = false;
         }
 
-        $doctrineConfig = Setup::createAnnotationMetadataConfiguration(
-            $connectionConfig['metadata'],
-            $isDevMode
+        $doctrineConfig = Setup::createConfiguration($isDevMode);
+
+        $doctrineConfig->setMetadataDriverImpl(
+            new AnnotationDriver(new AnnotationReader(), $connectionConfig['paths'])
         );
 
         if (isset($connectionConfig['cache'])) {
             switch ($connectionConfig['cache']) {
                 case 'apc':
-                    $cache = new ApcCache;
-                    $doctrineConfig->setQueryCacheImpl($cache);
-                    $doctrineConfig->setMetadataCacheImpl($cache);
+                    $this->cache = new ApcCache;
+                    $doctrineConfig->setQueryCacheImpl($this->cache);
+                    $doctrineConfig->setMetadataCacheImpl($this->cache);
+                    $doctrineConfig->setHydrationCacheImpl($this->cache);
+                    $doctrineConfig->setResultCacheImpl($this->cache);
                     break;
                 case 'array':
-                    $cache = new ArrayCache;
-                    $doctrineConfig->setQueryCacheImpl($cache);
-                    $doctrineConfig->setMetadataCacheImpl($cache);
+                    $this->cache = new ArrayCache;
+                    $doctrineConfig->setQueryCacheImpl($this->cache);
+                    $doctrineConfig->setMetadataCacheImpl($this->cache);
+                    $doctrineConfig->setHydrationCacheImpl($this->cache);
+                    $doctrineConfig->setResultCacheImpl($this->cache);
                     break;
+            }
+
+            if (
+                null !== $this->cache &&
+                isset($connectionConfig['second_level_cache']) &&
+                $connectionConfig['second_level_cache'] === true
+            ) {
+                throw new Exception("Doctrine Second Level Cache does not work so don't bother");
+
+                $this->regionsConfiguration = new RegionsConfiguration();
+                $this->regionsConfiguration->setLifetime('my_entity_region', 3600);
+                $this->cacheFactory = new DefaultCacheFactory($this->regionsConfiguration, $this->cache);
+                $doctrineConfig->setSecondLevelCacheEnabled();
+                $secondLevelCacheConfiguration = $doctrineConfig->getSecondLevelCacheConfiguration();
+                $secondLevelCacheConfiguration->setCacheFactory($this->cacheFactory);
+                $secondLevelCacheConfiguration->setRegionsConfiguration($this->regionsConfiguration);
+                if (isset($connectionConfig['debug']) && $connectionConfig['debug'] === true) {
+                    $this->cacheLogger = new CacheLogger();
+                    $secondLevelCacheConfiguration->setCacheLogger($this->cacheLogger);
+                }
             }
         }
 
@@ -246,7 +370,101 @@ class Doctrine extends AbstractManagerRegistry
         $connection = $entityManager->getConnection();
         $connection->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
 
+        if (isset($connectionConfig['debug']) && $connectionConfig['debug'] === true) {
+            $connection->getConfiguration()->setSQLLogger(new SqlLogger($this->registry));
+        }
+
         $this->addListeners($entityManager);
         return $entityManager;
+    }
+
+    /**
+     * @return Cache
+     */
+    public function getCache()
+    {
+        return $this->cache;
+    }
+
+    /**
+     * @param Cache $cache
+     * @return $this
+     */
+    public function setCache(Cache $cache)
+    {
+        $this->cache = $cache;
+        return $this;
+    }
+
+    /**
+     * @return CacheFactory
+     */
+    public function getCacheFactory()
+    {
+        return $this->cacheFactory;
+    }
+
+    /**
+     * @param CacheFactory $cacheFactory
+     * @return $this
+     */
+    public function setCacheFactory(CacheFactory $cacheFactory)
+    {
+        $this->cacheFactory = $cacheFactory;
+        return $this;
+    }
+
+    /**
+     * @return SqlLogger
+     */
+    public function getSqlLogger()
+    {
+        return $this->sqlLogger;
+    }
+
+    /**
+     * @param SqlLogger $sqlLogger
+     * @return $this
+     */
+    public function setSqlLogger(SqlLogger $sqlLogger)
+    {
+        $this->sqlLogger = $sqlLogger;
+        return $this;
+    }
+
+    /**
+     * @return CacheLogger
+     */
+    public function getCacheLogger()
+    {
+        return $this->cacheLogger;
+    }
+
+    /**
+     * @param CacheLogger $cacheLogger
+     * @return $this
+     */
+    public function setCacheLogger(CacheLogger $cacheLogger)
+    {
+        $this->cacheLogger = $cacheLogger;
+        return $this;
+    }
+
+    /**
+     * @return RegionsConfiguration
+     */
+    public function getRegionsConfiguration()
+    {
+        return $this->regionsConfiguration;
+    }
+
+    /**
+     * @param RegionsConfiguration $regionsConfiguration
+     * @return $this
+     */
+    public function setRegionsConfiguration(RegionsConfiguration $regionsConfiguration)
+    {
+        $this->regionsConfiguration = $regionsConfiguration;
+        return $this;
     }
 }

@@ -67,6 +67,10 @@ abstract class App extends Application implements ApplicationInterface
             error_reporting(E_ALL);
             ini_set('display_errors', "On");
         }
+
+        $annotation = new Annotation($this->getRegistry());
+        $this->getRegistry()->setAnnotation($annotation);
+
         $this->isConfigured = true;
         return $this;
     }

@@ -48,26 +48,26 @@ interface RegistryInterface
     public function setResponse(Response $response);
 
     /**
+     * @return Config
+     */
+    public function getConfig();
+
+    /**
      * @param Config $config
      * @return $this
      */
     public function setConfig(Config $config);
 
     /**
-     * @return Config
+     * @return Dictionary
      */
-    public function getConfig();
+    public function getDictionary();
 
     /**
      * @param Dictionary $dictionary
      * @return $this
      */
     public function setDictionary(Dictionary $dictionary);
-
-    /**
-     * @return Dictionary
-     */
-    public function getDictionary();
 
     /**
      * @return Twig
@@ -81,15 +81,20 @@ interface RegistryInterface
     public function setTwig(Twig $twig);
 
     /**
+     * @return Klein
+     */
+    public function getKlein();
+
+    /**
      * @param Klein $klein
      * @return $this
      */
     public function setKlein(Klein $klein);
 
     /**
-     * @return Klein
+     * @return ConsoleApplication
      */
-    public function getKlein();
+    public function getConsoleApplication();
 
     /**
      * @param ConsoleApplication $consoleApplication
@@ -98,9 +103,9 @@ interface RegistryInterface
     public function setConsoleApplication(ConsoleApplication $consoleApplication);
 
     /**
-     * @return ConsoleApplication
+     * @return Gearman
      */
-    public function getConsoleApplication();
+    public function getGearman();
 
     /**
      * @param Gearman $gearman
@@ -109,14 +114,14 @@ interface RegistryInterface
     public function setGearman(Gearman $gearman);
 
     /**
-     * @return Gearman
-     */
-    public function getGearman();
-
-    /**
      * @return GearmanDispatcher
      */
     public function getGearmanDispatcher();
+
+    /**
+     * @return Doctrine
+     */
+    public function getDoctrine();
 
     /**
      * @param Doctrine $doctrine
@@ -125,9 +130,48 @@ interface RegistryInterface
     public function setDoctrine(Doctrine $doctrine);
 
     /**
-     * @return Doctrine
+     * @return Predis
      */
-    public function getDoctrine();
+    public function getPredis();
+
+    /**
+     * @param Predis $predis
+     * @return $this
+     */
+    public function setPredis(Predis $predis);
+
+    /**
+     * @return Annotation
+     */
+    public function getAnnotation();
+
+    /**
+     * @param Annotation $annotation
+     * @return $this
+     */
+    public function setAnnotation(Annotation $annotation);
+
+    /**
+     * @return Serializer
+     */
+    public function getSerializer();
+
+    /**
+     * @param Serializer $serializer
+     * @return $this
+     */
+    public function setSerializer(Serializer $serializer);
+
+    /**
+     * @return Language
+     */
+    public function getLanguage();
+
+    /**
+     * @param Language $language
+     * @return $this
+     */
+    public function setLanguage(Language $language);
 
     /**
      * @return LoggerInterface

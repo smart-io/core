@@ -1,7 +1,9 @@
 <?php
 namespace Sinergi\Core;
 
+use Sinergi\Core\VagrantCommand\VagrantCommand;
 use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Helper\FormatterHelper;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
@@ -45,7 +47,24 @@ class CommandRuntime implements RuntimeInterface
 
     public function run()
     {
+        if ($this->registry->getConfig()->get('app.debug')) {
+            foreach ($this->app->all() as $commandKey => $command) {
+                if (method_exists($command, 'isVagrant') && $command->isVagrant()) {
+                    $this->toggleVagrantCommand($commandKey, $command);
+                }
+            }
+        }
+
         $this->app->run();
+    }
+
+    /**
+     * @param string $commandKey
+     * @param SymfonyCommand $command
+     */
+    public function toggleVagrantCommand($commandKey, SymfonyCommand $command)
+    {
+        $this->app->add(new VagrantCommand($this->registry, $command));
     }
 
     /**
@@ -55,7 +74,13 @@ class CommandRuntime implements RuntimeInterface
     {
         $user = $this->registry->getConfig()->get('command.user');
 
-        if (null !== $user) {
+        // Bypass cache commands as we need the sudoer user to run the commands
+        if (
+            null !== $user &&
+            (!isset($_SERVER['argv'][1]) || $_SERVER['argv'][1] !== 'flushall') &&
+            (!isset($_SERVER['argv'][1]) || $_SERVER['argv'][1] !== 'redis:flushall') &&
+            (!isset($_SERVER['argv'][1]) || $_SERVER['argv'][1] !== 'apc:flushall')
+        ) {
             $name = $user;
             $user = posix_getpwnam($user);
             posix_setgid($user['gid']);

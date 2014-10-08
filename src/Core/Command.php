@@ -19,4 +19,10 @@ abstract class Command extends SynfonyCommand
         $this->dialog = new DialogHelper;
         parent::__construct();
     }
+
+    public function isVagrant()
+    {
+        $class = new \ReflectionClass($this);
+        return $class->hasConstant("RUN_VAGRANT");
+    }
 }

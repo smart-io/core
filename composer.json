@@ -1,15 +1,22 @@
 {
     "name": "sinergi/core",
     "require": {
-        "sinergi/config": "0.4.*",
-        "sinergi/dictionary": "0.2.*",
-        "sinergi/gearman": "0.5.*",
-        "sinergi/registry": "0.1.*",
+        "sinergi/config": "~0.4",
+        "sinergi/dictionary": "~0.2",
+        "sinergi/event": "~0.3",
+        "sinergi/gearman": "~0.5",
+        "sinergi/token": "~0.1",
+        "sinergi/validation": "~0.2",
+        "sinergi/registry": "~0.1",
         "klein/klein": "dev-master",
-        "twig/twig": "1.15.*",
-        "symfony/console": "2.5.*",
-        "doctrine/orm": "2.*",
-        "psr/log": "~1"
+        "twig/twig": "~1.15",
+        "symfony/console": "~2.5",
+        "doctrine/orm": "dev-master",
+        "doctrine/dbal": "dev-master",
+        "psr/log": "~1",
+        "cocur/slugify": "~0.8",
+        "jms/serializer": "~0.16",
+        "predis/predis": "~1.0"
     },
     "require-dev": {
         "facebook/xhprof": "dev-master",
@@ -18,12 +25,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Sinergi\\Core\\": "src/Core"
+            "Eatnow\\Core\\": "src/Core"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Sinergi\\Core\\Tests\\": ["tests/Core/Tests", "tests/Core/Tests/_includes"]
+            "Eatnow\\Core\\Tests\\": ["tests/Core/Tests", "tests/Core/Tests/_includes"]
         }
     }
 }
