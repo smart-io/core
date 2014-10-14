@@ -16,7 +16,8 @@
         "psr/log": "~1",
         "cocur/slugify": "~0.8",
         "jms/serializer": "~0.16",
-        "predis/predis": "~1.0"
+        "predis/predis": "~1.0",
+        "sinergi/browsersession": "dev-develop"
     },
     "require-dev": {
         "facebook/xhprof": "dev-master",

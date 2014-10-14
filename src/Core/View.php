@@ -27,6 +27,11 @@ abstract class View
      */
     abstract public function getRegistry();
 
+    /**
+     * @return RegistryInterface
+     */
+    abstract public function getContainer();
+
     use ComponentRegistryTrait;
 
     /**

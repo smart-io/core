@@ -21,6 +21,8 @@ use Sinergi\Core\Twig;
 use Sinergi\Dictionary\Dictionary;
 use Sinergi\Gearman\Dispatcher as GearmanDispatcher;
 use Symfony\Component\Console\Application as ConsoleApplication;
+use Sinergi\Core\BrowserSession\BrowserSession;
+use Sinergi\BrowserSession\BrowserSessionController;
 
 trait ComponentRegistryTrait
 {
@@ -28,6 +30,37 @@ trait ComponentRegistryTrait
      * @return RegistryInterface
      */
     abstract function getRegistry();
+
+    /**
+     * @return RegistryInterface
+     */
+    abstract function getContainer();
+
+    /**
+     * @return BrowserSessionController
+     */
+    public function getBrowserSessionController()
+    {
+        if (!$browserSession = $this->getRegistry()->get('browserSession')) {
+            $browserSession = new BrowserSession($this->getContainer());
+            $this->getRegistry()->set('browserSession', $browserSession);
+        }
+        return $browserSession->getController();
+    }
+
+    /**
+     * @param BrowserSessionController $browserSessionController
+     * @return $this
+     */
+    public function setBrowserSessionController(BrowserSessionController $browserSessionController)
+    {
+        if (!$browserSession = $this->getRegistry()->get('browserSession')) {
+            $browserSession = new BrowserSession($this->getContainer());
+            $this->getRegistry()->set('browserSession', $browserSession);
+        }
+        $browserSession->setController($browserSessionController);
+        return $this;
+    }
 
     /**
      * @return Request
