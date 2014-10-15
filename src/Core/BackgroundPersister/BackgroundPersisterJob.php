@@ -3,11 +3,33 @@ namespace Sinergi\Core\BackgroundPersister;
 
 use Doctrine\ORM\EntityManager;
 use GearmanJob;
-use Sinergi\Job;
+use Sinergi\Core\ContainerInterface;
+use Sinergi\Core\Job;
 
 class BackgroundPersisterJob extends Job
 {
     const JOB_NAME = 'backgroundpersister';
+
+    /**
+     * @var ContainerInterface
+     */
+    private $container;
+
+    /**
+     * @param ContainerInterface $container
+     */
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+    }
+
+    /**
+     * @return ContainerInterface
+     */
+    public function getContainer()
+    {
+        return $this->container;
+    }
 
     /**
      * @return string
