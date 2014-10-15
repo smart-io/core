@@ -18,11 +18,9 @@
         "doctrine/orm": "dev-master",
         "doctrine/dbal": "dev-master",
         "psr/log": "~1",
-        "cocur/slugify": "~0.8",
+        "cocur/slugify": "~0.10",
         "jms/serializer": "~0.16",
-        "predis/predis": "~1.0",
-
-        "znarkus/postmark": "dev-master"
+        "predis/predis": "~1.0"
     },
     "require-dev": {
         "facebook/xhprof": "dev-master",
