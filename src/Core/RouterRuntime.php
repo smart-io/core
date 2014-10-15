@@ -7,25 +7,25 @@ use Klein\Response;
 class RouterRuntime implements RuntimeInterface
 {
     /**
-     * @var RegistryInterface
+     * @var ContainerInterface
      */
-    private $registry;
+    private $container;
 
     /**
-     * @param RegistryInterface $registry
+     * @param ContainerInterface $container
      */
-    public function __construct(RegistryInterface $registry)
+    public function __construct(ContainerInterface $container)
     {
-        $this->registry = $registry;
+        $this->container = $container;
     }
 
     public function configure()
     {
-        if ($this->registry->getConfig()->get('app.debug')) {
+        if ($this->container->getConfig()->get('app.debug')) {
             error_reporting(E_ALL);
             ini_set('display_errors', "On");
         } else {
-            $errorHandler = new ErrorHandler($this->registry->getErrorLogger());
+            $errorHandler = new ErrorHandler($this->container->getErrorLogger());
             set_error_handler([$errorHandler, 'error']);
             set_exception_handler([$errorHandler, 'exception']);
             register_shutdown_function([$errorHandler, 'shutdown']);
@@ -34,6 +34,6 @@ class RouterRuntime implements RuntimeInterface
 
     public function run()
     {
-        $this->registry->getKlein()->dispatch($this->registry->getRequest(), $this->registry->getResponse());
+        $this->container->getKlein()->dispatch($this->container->getRequest(), $this->container->getResponse());
     }
 }

@@ -15,8 +15,7 @@ use Sinergi\Core\ErrorLogger;
 use Sinergi\Core\Gearman;
 use Sinergi\Core\GearmanLogger;
 use Sinergi\Core\Language;
-use Sinergi\Core\Registry;
-use Sinergi\Core\RegistryInterface;
+use Sinergi\Core\ContainerInterface;
 use Sinergi\Core\Twig;
 use Sinergi\Dictionary\Dictionary;
 use Sinergi\Gearman\Dispatcher as GearmanDispatcher;
@@ -27,12 +26,7 @@ use Sinergi\BrowserSession\BrowserSessionController;
 trait ComponentRegistryTrait
 {
     /**
-     * @return RegistryInterface
-     */
-    abstract function getRegistry();
-
-    /**
-     * @return RegistryInterface
+     * @return ContainerInterface
      */
     abstract function getContainer();
 
@@ -41,9 +35,9 @@ trait ComponentRegistryTrait
      */
     public function getBrowserSessionController()
     {
-        if (!$browserSession = $this->getRegistry()->get('browserSession')) {
+        if (!$browserSession = $this->getContainer()->get('browserSession')) {
             $browserSession = new BrowserSession($this->getContainer());
-            $this->getRegistry()->set('browserSession', $browserSession);
+            $this->getContainer()->set('browserSession', $browserSession);
         }
         return $browserSession->getController();
     }
@@ -54,9 +48,9 @@ trait ComponentRegistryTrait
      */
     public function setBrowserSessionController(BrowserSessionController $browserSessionController)
     {
-        if (!$browserSession = $this->getRegistry()->get('browserSession')) {
+        if (!$browserSession = $this->getContainer()->get('browserSession')) {
             $browserSession = new BrowserSession($this->getContainer());
-            $this->getRegistry()->set('browserSession', $browserSession);
+            $this->getContainer()->set('browserSession', $browserSession);
         }
         $browserSession->setController($browserSessionController);
         return $this;
@@ -67,10 +61,10 @@ trait ComponentRegistryTrait
      */
     public function getRequest()
     {
-        if (null === $this->getRegistry()->get('request')) {
-            $this->getRegistry()->set('request', Request::createFromGlobals());
+        if (null === $this->getContainer()->get('request')) {
+            $this->getContainer()->set('request', Request::createFromGlobals());
         }
-        return $this->getRegistry()->get('request');
+        return $this->getContainer()->get('request');
     }
 
     /**
@@ -79,7 +73,7 @@ trait ComponentRegistryTrait
      */
     public function setRequest(Request $request)
     {
-        $this->getRegistry()->set('request', $request);
+        $this->getContainer()->set('request', $request);
         return $this;
     }
 
@@ -88,10 +82,10 @@ trait ComponentRegistryTrait
      */
     public function getResponse()
     {
-        if (null === $this->getRegistry()->get('response')) {
-            $this->getRegistry()->set('response', new Response());
+        if (null === $this->getContainer()->get('response')) {
+            $this->getContainer()->set('response', new Response());
         }
-        return $this->getRegistry()->get('response');
+        return $this->getContainer()->get('response');
     }
 
     /**
@@ -100,7 +94,7 @@ trait ComponentRegistryTrait
      */
     public function setResponse(Response $response)
     {
-        $this->getRegistry()->set('response', $response);
+        $this->getContainer()->set('response', $response);
         return $this;
     }
 
@@ -109,10 +103,10 @@ trait ComponentRegistryTrait
      */
     public function getConfig()
     {
-        if (null === $this->getRegistry()->get('config')) {
-            $this->getRegistry()->set('config', new Config());
+        if (null === $this->getContainer()->get('config')) {
+            $this->getContainer()->set('config', new Config());
         }
-        return $this->getRegistry()->get('config');
+        return $this->getContainer()->get('config');
     }
 
     /**
@@ -121,7 +115,7 @@ trait ComponentRegistryTrait
      */
     public function setConfig(Config $config)
     {
-        $this->getRegistry()->set('config', $config);
+        $this->getContainer()->set('config', $config);
         return $this;
     }
 
@@ -130,10 +124,10 @@ trait ComponentRegistryTrait
      */
     public function getLanguage()
     {
-        if (!$this->getRegistry()->get('language')) {
-            $this->getRegistry()->set('language', new Language($this->getRegistry()->getConfig()));
+        if (!$this->getContainer()->get('language')) {
+            $this->getContainer()->set('language', new Language($this->getContainer()->getConfig()));
         }
-        return $this->getRegistry()->get('language');
+        return $this->getContainer()->get('language');
     }
 
     /**
@@ -142,7 +136,7 @@ trait ComponentRegistryTrait
      */
     public function setLanguage(Language $language)
     {
-        $this->getRegistry()->set('language', $language);
+        $this->getContainer()->set('language', $language);
         return $this;
     }
 
@@ -151,13 +145,13 @@ trait ComponentRegistryTrait
      */
     public function getDictionary()
     {
-        if (null === $this->getRegistry()->get('dictionary')) {
+        if (null === $this->getContainer()->get('dictionary')) {
             $config = $this->getConfig()->get('dictionary');
             $dictionary = (new Dictionary())->setStorage($config['storage']);
             $dictionary->setLanguage($this->getLanguage()->getLanguage());
-            $this->getRegistry()->set('dictionary', $dictionary);
+            $this->getContainer()->set('dictionary', $dictionary);
         }
-        return $this->getRegistry()->get('dictionary');
+        return $this->getContainer()->get('dictionary');
     }
 
     /**
@@ -166,7 +160,7 @@ trait ComponentRegistryTrait
      */
     public function setDictionary(Dictionary $dictionary)
     {
-        $this->getRegistry()->set('dictionary', $dictionary);
+        $this->getContainer()->set('dictionary', $dictionary);
         return $this;
     }
 
@@ -175,10 +169,10 @@ trait ComponentRegistryTrait
      */
     public function getTwig()
     {
-        if (null === $this->getRegistry()->get('twig')) {
-            $this->getRegistry()->set('twig', new Twig($this->getRegistry()));
+        if (null === $this->getContainer()->get('twig')) {
+            $this->getContainer()->set('twig', new Twig($this->getContainer()));
         }
-        return $this->getRegistry()->get('twig');
+        return $this->getContainer()->get('twig');
     }
 
     /**
@@ -187,7 +181,7 @@ trait ComponentRegistryTrait
      */
     public function setTwig(Twig $twig)
     {
-        $this->getRegistry()->set('twig', $twig);
+        $this->getContainer()->set('twig', $twig);
         return $this;
     }
 
@@ -196,10 +190,10 @@ trait ComponentRegistryTrait
      */
     public function getKlein()
     {
-        if (null === $this->getRegistry()->get('klein')) {
-            $this->getRegistry()->set('klein', new Klein());
+        if (null === $this->getContainer()->get('klein')) {
+            $this->getContainer()->set('klein', new Klein());
         }
-        return $this->getRegistry()->get('klein');
+        return $this->getContainer()->get('klein');
     }
 
     /**
@@ -208,7 +202,7 @@ trait ComponentRegistryTrait
      */
     public function setKlein(Klein $klein)
     {
-        $this->getRegistry()->set('klein', $klein);
+        $this->getContainer()->set('klein', $klein);
         return $this;
     }
 
@@ -217,10 +211,10 @@ trait ComponentRegistryTrait
      */
     public function getConsoleApplication()
     {
-        if (null === $this->getRegistry()->get('consoleApplication')) {
-            $this->getRegistry()->set('consoleApplication', new ConsoleApplication());
+        if (null === $this->getContainer()->get('consoleApplication')) {
+            $this->getContainer()->set('consoleApplication', new ConsoleApplication());
         }
-        return $this->getRegistry()->get('consoleApplication');
+        return $this->getContainer()->get('consoleApplication');
     }
 
     /**
@@ -229,7 +223,7 @@ trait ComponentRegistryTrait
      */
     public function setConsoleApplication(ConsoleApplication $consoleApplication)
     {
-        $this->getRegistry()->set('consoleApplication', $consoleApplication);
+        $this->getContainer()->set('consoleApplication', $consoleApplication);
         return $this;
     }
 
@@ -238,10 +232,10 @@ trait ComponentRegistryTrait
      */
     public function getGearman()
     {
-        if (null === $this->getRegistry()->get('gearman')) {
-            $this->getRegistry()->set('gearman', new Gearman($this->getRegistry()));
+        if (null === $this->getContainer()->get('gearman')) {
+            $this->getContainer()->set('gearman', new Gearman($this->getContainer()));
         }
-        return $this->getRegistry()->get('gearman');
+        return $this->getContainer()->get('gearman');
     }
 
     /**
@@ -250,7 +244,7 @@ trait ComponentRegistryTrait
      */
     public function setGearman(Gearman $gearman)
     {
-        $this->getRegistry()->set('gearman', $gearman);
+        $this->getContainer()->set('gearman', $gearman);
         return $this;
     }
 
@@ -267,10 +261,10 @@ trait ComponentRegistryTrait
      */
     public function getDoctrine()
     {
-        if (null === $this->getRegistry()->get('doctrine')) {
-            $this->getRegistry()->set('doctrine', new Doctrine($this->getRegistry()));
+        if (null === $this->getContainer()->get('doctrine')) {
+            $this->getContainer()->set('doctrine', new Doctrine($this->getContainer()));
         }
-        return $this->getRegistry()->get('doctrine');
+        return $this->getContainer()->get('doctrine');
     }
 
     /**
@@ -279,7 +273,7 @@ trait ComponentRegistryTrait
      */
     public function setDoctrine(Doctrine $doctrine)
     {
-        $this->getRegistry()->set('doctrine', $doctrine);
+        $this->getContainer()->set('doctrine', $doctrine);
         return $this;
     }
 
@@ -288,10 +282,10 @@ trait ComponentRegistryTrait
      */
     public function getPredis()
     {
-        if (null === $this->getRegistry()->get('predis')) {
-            $this->getRegistry()->set('predis', new Predis($this->getRegistry()));
+        if (null === $this->getContainer()->get('predis')) {
+            $this->getContainer()->set('predis', new Predis($this->getContainer()));
         }
-        return $this->getRegistry()->get('predis');
+        return $this->getContainer()->get('predis');
     }
 
     /**
@@ -300,7 +294,7 @@ trait ComponentRegistryTrait
      */
     public function setPredis(Predis $predis)
     {
-        $this->getRegistry()->set('predis', $predis);
+        $this->getContainer()->set('predis', $predis);
         return $this;
     }
 
@@ -309,8 +303,8 @@ trait ComponentRegistryTrait
      */
     public function getAnnotation()
     {
-        if (!$annotation = $this->getRegistry()->get('annotation')) {
-            $this->getRegistry()->set('annotation', $annotation = new Annotation($this->getRegistry()));
+        if (!$annotation = $this->getContainer()->get('annotation')) {
+            $this->getContainer()->set('annotation', $annotation = new Annotation($this->getContainer()));
         }
         return $annotation;
     }
@@ -321,7 +315,7 @@ trait ComponentRegistryTrait
      */
     public function setAnnotation(Annotation $annotation)
     {
-        $this->getRegistry()->set('annotation', $annotation);
+        $this->getContainer()->set('annotation', $annotation);
         return $this;
     }
 
@@ -330,8 +324,8 @@ trait ComponentRegistryTrait
      */
     public function getSerializer()
     {
-        if (!$serializer = $this->getRegistry()->get('serializer')) {
-            $this->getRegistry()->set('serializer', $serializer = new Serializer($this->getRegistry()));
+        if (!$serializer = $this->getContainer()->get('serializer')) {
+            $this->getContainer()->set('serializer', $serializer = new Serializer($this->getContainer()));
         }
         return $serializer;
     }
@@ -342,7 +336,7 @@ trait ComponentRegistryTrait
      */
     public function setSerializer(Serializer $serializer)
     {
-        $this->getRegistry()->set('serializer', $serializer);
+        $this->getContainer()->set('serializer', $serializer);
         return $this;
     }
 
@@ -351,10 +345,10 @@ trait ComponentRegistryTrait
      */
     public function getGearmanLogger()
     {
-        if (null === $this->getRegistry()->get('gearmanLogger')) {
-            $this->getRegistry()->set('gearmanLogger', new GearmanLogger($this->getRegistry()));
+        if (null === $this->getContainer()->get('gearmanLogger')) {
+            $this->getContainer()->set('gearmanLogger', new GearmanLogger($this->getContainer()));
         }
-        return $this->getRegistry()->get('gearmanLogger');
+        return $this->getContainer()->get('gearmanLogger');
     }
 
     /**
@@ -363,7 +357,7 @@ trait ComponentRegistryTrait
      */
     public function setGearmanLogger(LoggerInterface $gearmanLogger)
     {
-        $this->getRegistry()->set('gearmanLogger', $gearmanLogger);
+        $this->getContainer()->set('gearmanLogger', $gearmanLogger);
         return $this;
     }
 
@@ -372,10 +366,10 @@ trait ComponentRegistryTrait
      */
     public function getErrorLogger()
     {
-        if (null === $this->getRegistry()->get('errorLogger')) {
-            $this->getRegistry()->set('errorLogger', new ErrorLogger($this->getRegistry()));
+        if (null === $this->getContainer()->get('errorLogger')) {
+            $this->getContainer()->set('errorLogger', new ErrorLogger($this->getContainer()));
         }
-        return $this->getRegistry()->get('errorLogger');
+        return $this->getContainer()->get('errorLogger');
     }
 
     /**
@@ -384,7 +378,7 @@ trait ComponentRegistryTrait
      */
     public function setErrorLogger(LoggerInterface $errorLogger)
     {
-        $this->getRegistry()->set('errorLogger', $errorLogger);
+        $this->getContainer()->set('errorLogger', $errorLogger);
         return $this;
     }
 

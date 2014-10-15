@@ -4,7 +4,7 @@ namespace Sinergi\Core\BrowserSession;
 use Sinergi\BrowserSession\BrowserSessionController;
 use Sinergi\BrowserSession\CacheDriver\PredisDriver;
 use Sinergi\BrowserSession\RouterDriver\KleinDriver;
-use Sinergi\Core\RegistryInterface;
+use Sinergi\Core\ContainerInterface;
 
 class BrowserSession
 {
@@ -14,9 +14,9 @@ class BrowserSession
     private $controller;
 
     /**
-     * @param RegistryInterface $container
+     * @param ContainerInterface $container
      */
-    public function __construct(RegistryInterface $container)
+    public function __construct(ContainerInterface $container)
     {
         $this->controller = new BrowserSessionController(
             new DatabaseDriver($container),

@@ -4,15 +4,15 @@ namespace Sinergi\Core;
 class Serializer
 {
     /**
-     * @var RegistryInterface
+     * @var ContainerInterface
      */
-    private $registry;
+    private $container;
 
     /**
-     * @param RegistryInterface $registry
+     * @param ContainerInterface $container
      */
-    public function __construct(RegistryInterface $registry)
+    public function __construct(ContainerInterface $container)
     {
-        $this->registry = $registry;
+        $this->container = $container;
     }
 }

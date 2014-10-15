@@ -10,21 +10,21 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 class GearmanRuntime implements RuntimeInterface
 {
     /**
-     * @var RegistryInterface
+     * @var ContainerInterface
      */
-    private $registry;
+    private $container;
 
     /**
-     * @param RegistryInterface $registry
+     * @param ContainerInterface $container
      */
-    public function __construct(RegistryInterface $registry)
+    public function __construct(ContainerInterface $container)
     {
-        $this->registry = $registry;
+        $this->container = $container;
     }
 
     public function configure()
     {
-        $errorHandler = new ErrorHandler($this->registry->getGearmanLogger());
+        $errorHandler = new ErrorHandler($this->container->getGearmanLogger());
         set_error_handler([$errorHandler, 'error']);
         set_exception_handler([$errorHandler, 'exception']);
         register_shutdown_function([$errorHandler, 'shutdown']);
@@ -46,9 +46,9 @@ class GearmanRuntime implements RuntimeInterface
     private function stopGearman()
     {
         $command = new StopCommand();
-        $command->setConfig($this->registry->getGearman()->getConfig());
-        $command->setGearmanApplication($this->registry->getGearman()->getApplication());
-        $command->setProcess($this->registry->getGearman()->getProcess());
+        $command->setConfig($this->container->getGearman()->getConfig());
+        $command->setGearmanApplication($this->container->getGearman()->getApplication());
+        $command->setProcess($this->container->getGearman()->getProcess());
         $command->run(new ArrayInput([]), new ConsoleOutput());
     }
 
@@ -62,9 +62,9 @@ class GearmanRuntime implements RuntimeInterface
         } else {
             $command = new RestartCommand();
         }
-        $command->setConfig($this->registry->getGearman()->getConfig());
-        $command->setGearmanApplication($this->registry->getGearman()->getApplication());
-        $command->setProcess($this->registry->getGearman()->getProcess());
+        $command->setConfig($this->container->getGearman()->getConfig());
+        $command->setGearmanApplication($this->container->getGearman()->getApplication());
+        $command->setProcess($this->container->getGearman()->getProcess());
         $command->run(new ArrayInput([]), new ConsoleOutput());
     }
 }

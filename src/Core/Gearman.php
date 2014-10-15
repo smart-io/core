@@ -10,9 +10,9 @@ use Sinergi\Gearman\Process;
 class Gearman
 {
     /**
-     * @var RegistryInterface
+     * @var ContainerInterface
      */
-    private $registry;
+    private $container;
 
     /**
      * @var Dispatcher
@@ -35,11 +35,11 @@ class Gearman
     private $config;
 
     /**
-     * @param RegistryInterface $registry
+     * @param ContainerInterface $container
      */
-    public function __construct(RegistryInterface $registry)
+    public function __construct(ContainerInterface $container)
     {
-        $this->registry = $registry;
+        $this->container = $container;
     }
 
     /**
@@ -68,10 +68,10 @@ class Gearman
      */
     private function createConfig()
     {
-        $config = $this->registry->getConfig();
+        $config = $this->container->getConfig();
 
         return (new Config())
-            ->setBootstrap($this->registry->getApp()->getRootDir() . '/bin/gearman.php')
+            ->setBootstrap($this->container->getApp()->getRootDir() . '/bin/gearman.php')
             ->addServers($config->get('gearman.servers'))
             ->setUser($config->get('gearman.user'))
             ->setAutoUpdate($config->get('gearman.auto_update'));
@@ -93,7 +93,7 @@ class Gearman
     public function getDispatcher()
     {
         if (null === $this->dispatcher) {
-            $this->setDispatcher(new Dispatcher($this->getConfig(), $this->registry->getGearmanLogger()));
+            $this->setDispatcher(new Dispatcher($this->getConfig(), $this->container->getGearmanLogger()));
         }
         return $this->dispatcher;
     }
@@ -114,7 +114,7 @@ class Gearman
     public function getApplication()
     {
         if (null === $this->application) {
-            $this->setApplication(new Application($this->getConfig(), $this->getProcess(), null, $this->registry->getGearmanLogger()));
+            $this->setApplication(new Application($this->getConfig(), $this->getProcess(), null, $this->container->getGearmanLogger()));
         }
         try {
             $this->application->getWorker()->getWorker();
@@ -140,7 +140,7 @@ class Gearman
     public function getProcess()
     {
         if (null === $this->process) {
-            $this->setProcess(new Process($this->getConfig(), $this->registry->getGearmanLogger()));
+            $this->setProcess(new Process($this->getConfig(), $this->container->getGearmanLogger()));
         }
         return $this->process;
     }

@@ -6,16 +6,16 @@ use Twig_Extension;
 class RegistryTwigExtension extends Twig_Extension
 {
     /**
-     * @var RegistryInterface
+     * @var ContainerInterface
      */
-    private $registry;
+    private $container;
 
     /**
-     * @param RegistryInterface $registry
+     * @param ContainerInterface $container
      */
-    public function __construct(RegistryInterface $registry)
+    public function __construct(ContainerInterface $container)
     {
-        $this->registry = $registry;
+        $this->container = $container;
     }
 
     /**
@@ -24,10 +24,10 @@ class RegistryTwigExtension extends Twig_Extension
     public function getGlobals()
     {
         $globals = [];
-        foreach (get_class_methods($this->registry) as $method) {
+        foreach (get_class_methods($this->container) as $method) {
             if (substr($method, 0, 3) === 'get') {
                 $function = substr(strtolower($method), 3);
-                $globals[$function] = new RegistryTwigGlobal($method, $this->registry);
+                $globals[$function] = new RegistryTwigGlobal($method, $this->container);
             }
         }
         return $globals;

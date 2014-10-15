@@ -4,16 +4,16 @@ namespace Sinergi\Core;
 class TestRuntime implements RuntimeInterface
 {
     /**
-     * @var RegistryInterface
+     * @var ContainerInterface
      */
-    private $registry;
+    private $container;
 
     /**
-     * @param RegistryInterface $registry
+     * @param ContainerInterface $container
      */
-    public function __construct(RegistryInterface $registry)
+    public function __construct(ContainerInterface $container)
     {
-        $this->registry = $registry;
+        $this->container = $container;
     }
 
     public function configure()
@@ -29,13 +29,13 @@ class TestRuntime implements RuntimeInterface
     {
         $travis = getenv('TRAVIS');
         if ($travis) {
-            $this->registry->getApp()->setEnv(App::ENV_TRAVIS);
-            $this->registry->getConfig()->setEnvironment('travis');
+            $this->container->getApp()->setEnv(App::ENV_TRAVIS);
+            $this->container->getConfig()->setEnvironment('travis');
         } elseif (is_array($_SERVER)) {
             foreach ($_SERVER as $key => $value) {
                 if (stripos($key, 'TRAVIS') !== false) {
-                    $this->registry->getApp()->setEnv(App::ENV_TRAVIS);
-                    $this->registry->getConfig()->setEnvironment('travis');
+                    $this->container->getApp()->setEnv(App::ENV_TRAVIS);
+                    $this->container->getConfig()->setEnvironment('travis');
                     break;
                 }
             }

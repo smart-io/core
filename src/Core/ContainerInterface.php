@@ -9,17 +9,10 @@ use Psr\Log\LoggerInterface;
 use Sinergi\Config\Config;
 use Sinergi\Dictionary\Dictionary;
 use Sinergi\Gearman\Dispatcher as GearmanDispatcher;
-use SmartData\SmartData\SmartData;
 use Symfony\Component\Console\Application as ConsoleApplication;
 
-interface RegistryInterface
+interface ContainerInterface extends \Sinergi\Container\ContainerInterface
 {
-    public function get($key, $default = null);
-
-    public function set($key, $value);
-
-    public function jsonSerialize();
-
     /**
      * @return App
      */

@@ -9,9 +9,9 @@ use Twig_Loader_String;
 class Twig
 {
     /**
-     * @var RegistryInterface
+     * @var ContainerInterface
      */
-    private $registry;
+    private $container;
 
     /**
      * @var Twig_Environment
@@ -19,11 +19,11 @@ class Twig
     private $environment;
 
     /**
-     * @param RegistryInterface $registry
+     * @param ContainerInterface $container
      */
-    public function __construct(RegistryInterface $registry)
+    public function __construct(ContainerInterface $container)
     {
-        $this->registry = $registry;
+        $this->container = $container;
     }
 
     /**
@@ -53,7 +53,7 @@ class Twig
     protected function createEnvironment()
     {
         $options = [];
-        $config = $this->registry->getConfig();
+        $config = $this->container->getConfig();
 
         if ($config->get('app.debug')) {
             $options['debug'] = true;
@@ -76,7 +76,7 @@ class Twig
             $twig->addExtension(new Twig_Extension_Debug());
         }
 
-        $twig->addExtension(new RegistryTwigExtension($this->registry));
+        $twig->addExtension(new RegistryTwigExtension($this->container));
 
         return $twig;
     }

@@ -26,7 +26,7 @@ class FlushAllCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->write('Flushing all Redis cache: ');
-        $this->getRegistry()->getPredis()->getClient()->flushall();
+        $this->getContainer()->getPredis()->getClient()->flushall();
         $output->write('[ <fg=green>DONE</fg=green> ]', true);
     }
 }

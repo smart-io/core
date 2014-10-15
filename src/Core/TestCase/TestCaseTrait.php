@@ -1,12 +1,12 @@
 <?php
 namespace Sinergi\Core\TestCase;
 
-use Sinergi\Core\RegistryInterface;
+use Sinergi\Core\ContainerInterface;
 
 trait TestCaseTrait
 {
     /**
-     * @return RegistryInterface
+     * @return ContainerInterface
      */
     protected $registry;
 
@@ -29,7 +29,7 @@ trait TestCaseTrait
     {
         /** @var \Sinergi\Core\App $app */
         global $app;
-        $this->registry = $app->getRegistry();
+        $this->container = $app->getRegistry();
         $this->setRootDir($app->getRootDir());
         $this->setSrcDir($app->getSrcDir());
         $this->setTestDir(realpath(preg_replace('#([\/|\\\\])src[\/|\\\\]#', '$1tests$1', $app->getSrcDir(), 1) . '/Tests'));

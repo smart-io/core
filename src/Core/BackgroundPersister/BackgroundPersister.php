@@ -2,14 +2,14 @@
 namespace Sinergi\Core\BackgroundPersister;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Sinergi\Core\RegistryInterface;
+use Sinergi\Core\ContainerInterface;
 
 class BackgroundPersister
 {
     /**
-     * @var RegistryInterface
+     * @var ContainerInterface
      */
-    private $registry;
+    private $container;
 
     /**
      * @var array
@@ -27,11 +27,11 @@ class BackgroundPersister
     private $mergeOrPersist = [];
 
     /**
-     * @param RegistryInterface $registry
+     * @param ContainerInterface $container
      */
-    public function __construct(RegistryInterface $registry)
+    public function __construct(ContainerInterface $container)
     {
-        $this->registry = $registry;
+        $this->container = $container;
     }
 
     public function __destruct()
@@ -66,7 +66,7 @@ class BackgroundPersister
             }
         }
 
-        $this->registry->getGearmanDispatcher()->background(
+        $this->container->getGearmanDispatcher()->background(
             BackgroundPersisterJob::JOB_NAME,
             [
                 'persist' => $persist,
@@ -83,7 +83,7 @@ class BackgroundPersister
     public function persist(EntityManagerInterface $entityManager, $entity)
     {
         $entityManager->detach($entity);
-        $entityManagerKey = $this->registry->getDoctrine()->getEntityManagerKey($entityManager);
+        $entityManagerKey = $this->container->getDoctrine()->getEntityManagerKey($entityManager);
         $this->persist[$entityManagerKey][spl_object_hash($entity)] = $entity;
     }
 
@@ -94,7 +94,7 @@ class BackgroundPersister
     public function merge(EntityManagerInterface $entityManager, $entity)
     {
         $entityManager->detach($entity);
-        $entityManagerKey = $this->registry->getDoctrine()->getEntityManagerKey($entityManager);
+        $entityManagerKey = $this->container->getDoctrine()->getEntityManagerKey($entityManager);
         $this->merge[$entityManagerKey][spl_object_hash($entity)] = $entity;
     }
 
@@ -105,7 +105,7 @@ class BackgroundPersister
     public function mergeOrPersist(EntityManagerInterface $entityManager, $entity)
     {
         $entityManager->detach($entity);
-        $entityManagerKey = $this->registry->getDoctrine()->getEntityManagerKey($entityManager);
+        $entityManagerKey = $this->container->getDoctrine()->getEntityManagerKey($entityManager);
         $this->mergeOrPersist[$entityManagerKey][spl_object_hash($entity)] = $entity;
     }
 }

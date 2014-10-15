@@ -6,16 +6,16 @@ use Doctrine\Common\Annotations\AnnotationRegistry;
 class Annotation
 {
     /**
-     * @var RegistryInterface
+     * @var ContainerInterface
      */
-    private $registry;
+    private $container;
 
     /**
-     * @param $registry
+     * @param $container
      */
-    public function __construct(RegistryInterface $registry)
+    public function __construct(ContainerInterface $container)
     {
-        $this->registry = $registry;
+        $this->container = $container;
         $this->setup();
     }
 
@@ -24,12 +24,12 @@ class Annotation
         AnnotationRegistry::registerLoader('class_exists');
         AnnotationRegistry::registerAutoloadNamespace(
             "Doctrine\\ORM\\Mapping",
-            $this->registry->getApp()->getRootDir() .
+            $this->container->getApp()->getRootDir() .
             "/vendor/doctrine/orm/lib/Doctrine/ORM/Mapping"
         );
         AnnotationRegistry::registerAutoloadNamespace(
             "JMS\\Serializer\\Annotation",
-            $this->registry->getApp()->getRootDir() .
+            $this->container->getApp()->getRootDir() .
             "/vendor/jms/serializer/src/JMS/Serializer/Annotation"
         );
     }

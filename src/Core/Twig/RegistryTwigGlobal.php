@@ -9,18 +9,18 @@ class RegistryTwigGlobal
     private $service;
 
     /**
-     * @var RegistryInterface
+     * @var ContainerInterface
      */
-    private $registry;
+    private $container;
 
     /**
      * @param string $service
-     * @param RegistryInterface $registry
+     * @param ContainerInterface $container
      */
-    public function __construct($service, RegistryInterface $registry)
+    public function __construct($service, ContainerInterface $container)
     {
         $this->service = $service;
-        $this->registry = $registry;
+        $this->container = $container;
     }
 
     /**
@@ -30,13 +30,13 @@ class RegistryTwigGlobal
      */
     public function __call($name, array $arguments)
     {
-        $service = call_user_func([$this->registry, $this->service]);
+        $service = call_user_func([$this->container, $this->service]);
         return call_user_func_array([$service, $name], $arguments);
     }
 
     public function __toString()
     {
-        $object = call_user_func([$this->registry, $this->service]);
+        $object = call_user_func([$this->container, $this->service]);
         if (is_object($object)) {
             return (string)$object;
         }

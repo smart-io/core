@@ -6,9 +6,9 @@ use Predis\Client;
 class Predis
 {
     /**
-     * @var RegistryInterface
+     * @var ContainerInterface
      */
-    private $registry;
+    private $container;
 
     /**
      * @var Client
@@ -16,11 +16,11 @@ class Predis
     private $client;
 
     /**
-     * @param RegistryInterface $registry
+     * @param ContainerInterface $container
      */
-    public function __construct(RegistryInterface $registry)
+    public function __construct(ContainerInterface $container)
     {
-        $this->registry = $registry;
+        $this->container = $container;
     }
 
     /**
@@ -29,7 +29,7 @@ class Predis
     public function getClient()
     {
         if (null === $this->client) {
-            $config = $this->registry->getConfig();
+            $config = $this->container->getConfig();
             $this->client = new Client([
                 'scheme' => $config->get('predis.scheme'),
                 'host' => $config->get('predis.host'),

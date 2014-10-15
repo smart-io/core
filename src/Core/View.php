@@ -23,12 +23,12 @@ abstract class View
     abstract public function getTwig();
 
     /**
-     * @return RegistryInterface
+     * @return ContainerInterface
      */
     abstract public function getRegistry();
 
     /**
-     * @return RegistryInterface
+     * @return ContainerInterface
      */
     abstract public function getContainer();
 

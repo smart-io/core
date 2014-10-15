@@ -4,7 +4,7 @@ namespace Sinergi\Core\Doctrine;
 use Doctrine\DBAL\Logging\SQLLogger as SqlLoggerInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
-use Sinergi\Core\RegistryInterface;
+use Sinergi\Core\ContainerInterface;
 
 class SqlLogger implements SqlLoggerInterface, LoggerInterface
 {
@@ -24,17 +24,17 @@ class SqlLogger implements SqlLoggerInterface, LoggerInterface
     private $session;
 
     /**
-     * @var RegistryInterface
+     * @var ContainerInterface
      */
-    private $registry;
+    private $container;
 
     /**
-     * @param RegistryInterface $registry
+     * @param ContainerInterface $container
      */
-    public function __construct(RegistryInterface $registry)
+    public function __construct(ContainerInterface $container)
     {
-        $this->registry = $registry;
-        $this->logLevel = $this->registry->getConfig()->get('log.level');
+        $this->container = $container;
+        $this->logLevel = $this->container->getConfig()->get('log.level');
     }
 
     public function getSession()
@@ -68,7 +68,7 @@ class SqlLogger implements SqlLoggerInterface, LoggerInterface
     {
         if (!empty($message)) {
             if ($this->file === null) {
-                $this->file = $this->registry->getConfig()->get('log.doctrine');
+                $this->file = $this->container->getConfig()->get('log.doctrine');
             }
             $content = date('Y-m-d H:i:s') . ' (' . $this->getSession() . ') ' . $level . ': ' . $message . PHP_EOL;
             file_put_contents($this->file, $content, FILE_APPEND);

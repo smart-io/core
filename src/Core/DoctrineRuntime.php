@@ -7,16 +7,16 @@ use Symfony\Component\Console\Helper\HelperSet;
 class DoctrineRuntime implements RuntimeInterface
 {
     /**
-     * @var RegistryInterface
+     * @var ContainerInterface
      */
-    private $registry;
+    private $container;
 
     /**
-     * @param RegistryInterface $registry
+     * @param ContainerInterface $container
      */
-    public function __construct(RegistryInterface $registry)
+    public function __construct(ContainerInterface $container)
     {
-        $this->registry = $registry;
+        $this->container = $container;
     }
 
     public function configure()
@@ -40,8 +40,8 @@ class DoctrineRuntime implements RuntimeInterface
             }
         }
 
-        $commands = $this->registry->getDoctrine()->getCommands();
-        $helperSet = $this->registry->getDoctrine()->getHelperSet($entityManager);
+        $commands = $this->container->getDoctrine()->getCommands();
+        $helperSet = $this->container->getDoctrine()->getHelperSet($entityManager);
 
         if (!($helperSet instanceof HelperSet)) {
             foreach ($GLOBALS as $helperSetCandidate) {

@@ -40,9 +40,9 @@ class Doctrine extends AbstractManagerRegistry
     private $entityManagers;
 
     /**
-     * @var RegistryInterface
+     * @var ContainerInterface
      */
-    private $registry;
+    private $container;
 
     /**
      * @var HelperSet
@@ -85,12 +85,12 @@ class Doctrine extends AbstractManagerRegistry
     private $regionsConfiguration;
 
     /**
-     * @param RegistryInterface $registry
+     * @param ContainerInterface $container
      */
-    public function __construct(RegistryInterface $registry)
+    public function __construct(ContainerInterface $container)
     {
-        $this->registry = $registry;
-        $config = $this->registry->getConfig();
+        $this->container = $container;
+        $config = $this->container->getConfig();
         if ($defautName = $config->get('doctrine.default')) {
             $this->defautName = $defautName;
         }
@@ -104,7 +104,7 @@ class Doctrine extends AbstractManagerRegistry
     public function persistBackground(EntityManagerInterface $entityManager, $entity)
     {
         if (null === $this->backgroundPersister) {
-            $this->backgroundPersister = new BackgroundPersister($this->registry);
+            $this->backgroundPersister = new BackgroundPersister($this->container);
         }
         $this->backgroundPersister->persist($entityManager, $entity);
         return true;
@@ -118,7 +118,7 @@ class Doctrine extends AbstractManagerRegistry
     public function mergeBackground(EntityManagerInterface $entityManager, $entity)
     {
         if (null === $this->backgroundPersister) {
-            $this->backgroundPersister = new BackgroundPersister($this->registry);
+            $this->backgroundPersister = new BackgroundPersister($this->container);
         }
         $this->backgroundPersister->merge($entityManager, $entity);
         return true;
@@ -132,7 +132,7 @@ class Doctrine extends AbstractManagerRegistry
     public function mergeOrPersistBackground(EntityManagerInterface $entityManager, $entity)
     {
         if (null === $this->backgroundPersister) {
-            $this->backgroundPersister = new BackgroundPersister($this->registry);
+            $this->backgroundPersister = new BackgroundPersister($this->container);
         }
         $this->backgroundPersister->mergeOrPersist($entityManager, $entity);
         return true;
@@ -293,7 +293,7 @@ class Doctrine extends AbstractManagerRegistry
             $name = $this->getDefautName();
         }
 
-        $config = $this->registry->getConfig();
+        $config = $this->container->getConfig();
 
         if ($config->get("doctrine.connections.{$name}")) {
             $connectionConfig = $config->get("doctrine.connections.{$name}");
@@ -374,7 +374,7 @@ class Doctrine extends AbstractManagerRegistry
         $connection->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
 
         if (isset($connectionConfig['debug']) && $connectionConfig['debug'] === true) {
-            $connection->getConfiguration()->setSQLLogger(new SqlLogger($this->registry));
+            $connection->getConfiguration()->setSQLLogger(new SqlLogger($this->container));
         }
 
         $this->addListeners($entityManager);

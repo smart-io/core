@@ -2,15 +2,15 @@
 namespace Sinergi\Core;
 
 use Sinergi\Config\Config;
-use Sinergi\Registry\Application;
-use Sinergi\Registry\ApplicationInterface;
+use Sinergi\Container\Application;
+use Sinergi\Container\ApplicationInterface;
 
 abstract class App extends Application implements ApplicationInterface
 {
     /**
-     * @return RegistryInterface
+     * @return ContainerInterface
      */
-    abstract protected function getRegistry();
+    abstract protected function getContainer();
 
     const ENV_TEST = 'test';
     const ENV_DEV = 'dev';
@@ -57,7 +57,7 @@ abstract class App extends Application implements ApplicationInterface
      */
     protected function configure()
     {
-        $config = $this->getRegistry()->getConfig();
+        $config = $this->getContainer()->getConfig();
         $config->setPath($this->getRootDir() . DIRECTORY_SEPARATOR . $this->getConfigDir());
         $config->setEnvironment($this->getEnv());
         if ($config->get('app.timezone')) {
@@ -68,8 +68,8 @@ abstract class App extends Application implements ApplicationInterface
             ini_set('display_errors', "On");
         }
 
-        $annotation = new Annotation($this->getRegistry());
-        $this->getRegistry()->setAnnotation($annotation);
+        $annotation = new Annotation($this->getContainer());
+        $this->getContainer()->setAnnotation($annotation);
 
         $this->isConfigured = true;
         return $this;
@@ -110,15 +110,15 @@ abstract class App extends Application implements ApplicationInterface
         }
 
         if ($runtime === self::RUNTIME_ROUTER) {
-            $runtime = new RouterRuntime($this->getRegistry());
+            $runtime = new RouterRuntime($this->getContainer());
         } elseif ($runtime === self::RUNTIME_COMMAND) {
-            $runtime = new CommandRuntime($this->getRegistry());
+            $runtime = new CommandRuntime($this->getContainer());
         } elseif ($runtime === self::RUNTIME_DOCTRINE) {
-            $runtime = new DoctrineRuntime($this->getRegistry());
+            $runtime = new DoctrineRuntime($this->getContainer());
         } elseif ($runtime === self::RUNTIME_GEARMAN) {
-            $runtime = new GearmanRuntime($this->getRegistry());
+            $runtime = new GearmanRuntime($this->getContainer());
         } elseif ($runtime === self::RUNTIME_TEST) {
-            $runtime = new TestRuntime($this->getRegistry());
+            $runtime = new TestRuntime($this->getContainer());
         }
 
         if ($runtime) {

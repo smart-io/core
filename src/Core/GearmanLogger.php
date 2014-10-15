@@ -17,17 +17,17 @@ class GearmanLogger implements LoggerInterface
     private $file;
 
     /**
-     * @var RegistryInterface
+     * @var ContainerInterface
      */
-    private $registry;
+    private $container;
 
     /**
-     * @param RegistryInterface $registry
+     * @param ContainerInterface $container
      */
-    public function __construct(RegistryInterface $registry)
+    public function __construct(ContainerInterface $container)
     {
-        $this->registry = $registry;
-        $this->logLevel = $this->registry->getConfig()->get('log.level');
+        $this->container = $container;
+        $this->logLevel = $this->container->getConfig()->get('log.level');
     }
 
     /**
@@ -38,7 +38,7 @@ class GearmanLogger implements LoggerInterface
     {
         if (!empty($message)) {
             if ($this->file === null) {
-                $this->file = $this->registry->getConfig()->get('log.gearman');
+                $this->file = $this->container->getConfig()->get('log.gearman');
             }
             $content = date('Y-m-d H:i:s') . ' ' . $level . ': ' . $message . PHP_EOL;
             file_put_contents($this->file, $content, FILE_APPEND);

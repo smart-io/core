@@ -32,8 +32,8 @@ class FlushAllCommand extends Command
         $dummyInput = new ArrayInput([]);
         $output->write('Flushing all cache: ');
 
-        (new ApcFlushAllCommand($this->getRegistry()))->run($dummyInput, $dummyOutput);
-        (new RedisFlushAllCommand($this->getRegistry()))->run($dummyInput, $dummyOutput);
+        (new ApcFlushAllCommand($this->getContainer()))->run($dummyInput, $dummyOutput);
+        (new RedisFlushAllCommand($this->getContainer()))->run($dummyInput, $dummyOutput);
 
         $output->write('[ <fg=green>DONE</fg=green> ]', true);
     }

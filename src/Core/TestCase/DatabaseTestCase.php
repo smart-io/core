@@ -68,7 +68,7 @@ abstract class DatabaseTestCase extends PHPUnit_Extensions_Database_TestCase
     {
         $tables = func_get_args();
 
-        $em = $this->registry->getDoctrine()->getEntityManager();
+        $em = $this->container->getDoctrine()->getEntityManager();
         $connection = $em->getConnection();
         $platform = $connection->getDatabasePlatform();
 
@@ -96,7 +96,7 @@ abstract class DatabaseTestCase extends PHPUnit_Extensions_Database_TestCase
      */
     public function getConnection()
     {
-        $em = $this->registry->getDoctrine()->createEntityManager();
+        $em = $this->container->getDoctrine()->createEntityManager();
         $pdo = $em->getConnection()->getWrappedConnection();
         $em->clear();
 

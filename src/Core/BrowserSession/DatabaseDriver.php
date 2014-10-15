@@ -3,19 +3,19 @@ namespace Sinergi\Core\BrowserSession;
 
 use Sinergi\BrowserSession\BrowserSessionEntity;
 use Sinergi\BrowserSession\DatabaseDriver\DoctrineDriver;
-use Sinergi\Core\RegistryInterface;
+use Sinergi\Core\ContainerInterface;
 
 class DatabaseDriver extends DoctrineDriver
 {
     /**
-     * @var RegistryInterface
+     * @var ContainerInterface
      */
     private $container;
 
     /**
-     * @param RegistryInterface $container
+     * @param ContainerInterface $container
      */
-    public function __construct(RegistryInterface $container)
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
         parent::__construct($container->getEntityManager());

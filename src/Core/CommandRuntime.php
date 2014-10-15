@@ -10,9 +10,9 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 class CommandRuntime implements RuntimeInterface
 {
     /**
-     * @var RegistryInterface
+     * @var ContainerInterface
      */
-    private $registry;
+    private $container;
 
     /**
      * @var Application
@@ -20,12 +20,12 @@ class CommandRuntime implements RuntimeInterface
     private $app;
 
     /**
-     * @param RegistryInterface $registry
+     * @param ContainerInterface $container
      */
-    public function __construct(RegistryInterface $registry)
+    public function __construct(ContainerInterface $container)
     {
-        $this->registry = $registry;
-        $this->app = $registry->getConsoleApplication();
+        $this->container = $container;
+        $this->app = $container->getConsoleApplication();
     }
 
     public function configure()
@@ -34,11 +34,11 @@ class CommandRuntime implements RuntimeInterface
             return;
         }
 
-        if ($this->registry->getConfig()->get('app.debug')) {
+        if ($this->container->getConfig()->get('app.debug')) {
             error_reporting(E_ALL);
             ini_set('display_errors', "On");
         } else {
-            $errorHandler = new ErrorHandler($this->registry->getErrorLogger());
+            $errorHandler = new ErrorHandler($this->container->getErrorLogger());
             set_error_handler([$errorHandler, 'error']);
             set_exception_handler([$errorHandler, 'exception']);
             register_shutdown_function([$errorHandler, 'shutdown']);
@@ -47,7 +47,7 @@ class CommandRuntime implements RuntimeInterface
 
     public function run()
     {
-        if ($this->registry->getConfig()->get('app.debug')) {
+        if ($this->container->getConfig()->get('app.debug')) {
             foreach ($this->app->all() as $commandKey => $command) {
                 if (method_exists($command, 'isVagrant') && $command->isVagrant()) {
                     $this->toggleVagrantCommand($commandKey, $command);
@@ -64,7 +64,7 @@ class CommandRuntime implements RuntimeInterface
      */
     public function toggleVagrantCommand($commandKey, SymfonyCommand $command)
     {
-        $this->app->add(new VagrantCommand($this->registry, $command));
+        $this->app->add(new VagrantCommand($this->container, $command));
     }
 
     /**
@@ -72,7 +72,7 @@ class CommandRuntime implements RuntimeInterface
      */
     private function changeUser()
     {
-        $user = $this->registry->getConfig()->get('command.user');
+        $user = $this->container->getConfig()->get('command.user');
 
         // Bypass cache commands as we need the sudoer user to run the commands
         if (

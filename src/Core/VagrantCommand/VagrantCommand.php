@@ -2,7 +2,7 @@
 namespace Sinergi\Core\VagrantCommand;
 
 use Sinergi\Core\Command;
-use Sinergi\Core\RegistryInterface;
+use Sinergi\Core\ContainerInterface;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -12,13 +12,13 @@ class VagrantCommand extends Command
     public static $isVagrant;
 
     /**
-     * @param RegistryInterface $registry
+     * @param ContainerInterface $container
      * @param SymfonyCommand $command
      */
-    public function __construct(RegistryInterface $registry, SymfonyCommand $command)
+    public function __construct(ContainerInterface $container, SymfonyCommand $command)
     {
         $this->command = $command;
-        $this->registry = $registry;
+        $this->container = $container;
         parent::__construct();
     }
 
@@ -40,7 +40,7 @@ class VagrantCommand extends Command
         if ($this->detectVagrant()) {
             $this->command->execute($input, $output);
         } else {
-            $rootDir = $this->registry->getApp()->getRootDir();
+            $rootDir = $this->getContainer()->getApp()->getRootDir();
             chdir($rootDir);
             $command = $this->getVagrantCommand($rootDir);
             ob_start();
@@ -95,11 +95,11 @@ class VagrantCommand extends Command
     }
 
     /**
-     * @return RegistryInterface
+     * @return ContainerInterface
      */
-    public function getRegistry()
+    public function getContainer()
     {
-        return $this->registry;
+        return $this->container;
     }
 
     /**
