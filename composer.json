@@ -9,6 +9,7 @@
         "sinergi/validation": "~0.2",
         "sinergi/container": "~0.2",
         "sinergi/project": "dev-master",
+        "sinergi/security": "~0.1",
         "klein/klein": "dev-master",
         "twig/twig": "~1.15",
         "symfony/console": "~2.5",
