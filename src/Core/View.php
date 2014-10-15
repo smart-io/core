@@ -3,7 +3,6 @@ namespace Sinergi\Core;
 
 use Klein\Request;
 use Klein\Response;
-use Sinergi\Core\Registry\ComponentRegistryTrait;
 
 abstract class View
 {
@@ -21,11 +20,6 @@ abstract class View
      * @return Twig
      */
     abstract public function getTwig();
-
-    /**
-     * @return ContainerInterface
-     */
-    abstract public function getRegistry();
 
     /**
      * @return ContainerInterface

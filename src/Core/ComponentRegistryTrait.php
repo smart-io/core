@@ -1,22 +1,13 @@
 <?php
-namespace Sinergi\Core\Registry;
+namespace Sinergi\Core;
 
 use Doctrine\ORM\EntityManager;
-use Sinergi\Core\Annotation;
-use Sinergi\Core\Predis;
-use Sinergi\Core\Serializer;
 use Klein\Klein;
 use Klein\Request;
 use Klein\Response;
 use Psr\Log\LoggerInterface;
 use Sinergi\Config\Config;
 use Sinergi\Core\Doctrine;
-use Sinergi\Core\ErrorLogger;
-use Sinergi\Core\Gearman;
-use Sinergi\Core\GearmanLogger;
-use Sinergi\Core\Language;
-use Sinergi\Core\ContainerInterface;
-use Sinergi\Core\Twig;
 use Sinergi\Dictionary\Dictionary;
 use Sinergi\Gearman\Dispatcher as GearmanDispatcher;
 use Symfony\Component\Console\Application as ConsoleApplication;

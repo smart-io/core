@@ -1,7 +1,6 @@
 <?php
 namespace Sinergi\Core;
 
-use Sinergi\Core\Registry\ComponentRegistryTrait;
 use Symfony\Component\Console\Command\Command as SynfonyCommand;
 use Symfony\Component\Console\Helper\QuestionHelper;
 

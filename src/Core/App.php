@@ -1,7 +1,6 @@
 <?php
 namespace Sinergi\Core;
 
-use Sinergi\Config\Config;
 use Sinergi\Container\Application;
 use Sinergi\Container\ApplicationInterface;
 
@@ -10,7 +9,7 @@ abstract class App extends Application implements ApplicationInterface
     /**
      * @return ContainerInterface
      */
-    abstract protected function getContainer();
+    abstract public function getContainer();
 
     const ENV_TEST = 'test';
     const ENV_DEV = 'dev';

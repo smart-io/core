@@ -8,7 +8,7 @@ trait TestCaseTrait
     /**
      * @return ContainerInterface
      */
-    protected $registry;
+    protected $container;
 
     /**
      * @var string
@@ -29,7 +29,7 @@ trait TestCaseTrait
     {
         /** @var \Sinergi\Core\App $app */
         global $app;
-        $this->container = $app->getRegistry();
+        $this->container = $app->getContainer();
         $this->setRootDir($app->getRootDir());
         $this->setSrcDir($app->getSrcDir());
         $this->setTestDir(realpath(preg_replace('#([\/|\\\\])src[\/|\\\\]#', '$1tests$1', $app->getSrcDir(), 1) . '/Tests'));

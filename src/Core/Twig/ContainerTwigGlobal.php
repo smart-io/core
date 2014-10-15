@@ -1,7 +1,9 @@
 <?php
-namespace Sinergi\Core;
+namespace Sinergi\Core\Twig;
 
-class RegistryTwigGlobal
+use Sinergi\Core\ContainerInterface;
+
+class ContainerTwigGlobal
 {
     /**
      * @var string

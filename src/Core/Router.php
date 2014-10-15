@@ -1,7 +1,6 @@
 <?php
 namespace Sinergi\Core;
 
-use Sinergi\Core\Registry\ComponentRegistryTrait;
 use Klein\AbstractResponse;
 use Klein\Response;
 
