@@ -1,7 +1,7 @@
 {
     "name": "sinergi/core",
     "require": {
-        "sinergi/project": "dev-master",
+        "sinergi/devtools": "~0.2",
         "sinergi/config": "~0.4",
         "sinergi/dictionary": "~0.2",
         "sinergi/gearman": "~0.5",
