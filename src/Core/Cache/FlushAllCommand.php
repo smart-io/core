@@ -2,7 +2,7 @@
 namespace Sinergi\Core\Cache;
 
 use Sinergi\Core\ContainerInterface;
-use Symfony\Component\Console\Command\Command;
+use Sinergi\Core\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\NullOutput;
@@ -27,6 +27,14 @@ class FlushAllCommand extends Command
     {
         $this->container = $container;
         parent::__construct();
+    }
+
+    /**
+     * @return ContainerInterface
+     */
+    public function getContainer()
+    {
+        return $this->container;
     }
 
     protected function configure()
