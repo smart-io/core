@@ -91,6 +91,11 @@ class VagrantCommand extends Command
             return $path;
         }
 
+        $path = $this->getContainer()->getConfig()->get('vagrant.path');
+        if ($path) {
+            return $path;
+        }
+
         $file = $rootDir . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, [
                 ".vagrant",
                 "machines",
