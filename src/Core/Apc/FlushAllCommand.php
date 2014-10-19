@@ -1,14 +1,29 @@
 <?php
 namespace Sinergi\Core\Apc;
 
+use Sinergi\Core\ContainerInterface;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Sinergi\Command;
 
 class FlushAllCommand extends Command
 {
     const RUN_VAGRANT = true;
     const COMMAND_NAME = 'apc:flushall';
+
+    /**
+     * @var ContainerInterface
+     */
+    private $container;
+
+    /**
+     * @param ContainerInterface $container
+     */
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+        parent::__construct();
+    }
 
     protected function configure()
     {
