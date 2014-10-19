@@ -5,11 +5,22 @@ use Sinergi\Core\Command;
 use Sinergi\Core\ContainerInterface;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class VagrantCommand extends Command
 {
+    const VAGRANT_PATH_COMMAND = 'vagrant-path';
+
+    /**
+     * @var boolean
+     */
     public static $isVagrant;
+
+    /**
+     * @var InputInterface
+     */
+    private $input;
 
     /**
      * @param ContainerInterface $container
@@ -28,6 +39,7 @@ class VagrantCommand extends Command
             ->setDescription($this->command->getDescription())
             ->setAliases($this->command->getAliases())
             ->setDefinition($this->command->getDefinition());
+        $this->addOption(self::VAGRANT_PATH_COMMAND, null, InputOption::VALUE_OPTIONAL);
     }
 
     /**
@@ -37,6 +49,7 @@ class VagrantCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->input = $input;
         if ($this->detectVagrant()) {
             $this->command->execute($input, $output);
         } else {
@@ -60,7 +73,9 @@ class VagrantCommand extends Command
         $file = str_replace($rootDir, '', $_SERVER['SCRIPT_NAME']);
         $command = "sudo php " . $this->getVagrantCwd($rootDir) . $file;
         foreach (array_splice($_SERVER['argv'], 1) as $param) {
-            $command .= " " . $param;
+            if (substr($param, 0, strlen('--' . self::VAGRANT_PATH_COMMAND)) !== '--' . self::VAGRANT_PATH_COMMAND) {
+                $command .= " " . $param;
+            }
         }
         return $command;
     }
@@ -71,6 +86,11 @@ class VagrantCommand extends Command
      */
     public function getVagrantCwd($rootDir)
     {
+        $path = $this->input->getOption('vagrant-path');
+        if ($path) {
+            return $path;
+        }
+
         $file = $rootDir . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, [
                 ".vagrant",
                 "machines",
