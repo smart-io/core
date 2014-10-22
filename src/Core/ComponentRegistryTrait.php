@@ -73,10 +73,12 @@ trait ComponentRegistryTrait
      */
     public function getResponse()
     {
-        if (null === $this->getContainer()->get('response')) {
-            $this->getContainer()->set('response', new Response());
+        if (!$response = $this->getContainer()->get('response')) {
+            $response = new Response();
+            $this->getKlein()->setResponse($response);
+            $this->getContainer()->set('response', $response);
         }
-        return $this->getContainer()->get('response');
+        return $response;
     }
 
     /**

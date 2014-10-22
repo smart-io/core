@@ -50,7 +50,7 @@ class SqlLogger implements SqlLoggerInterface, LoggerInterface
      */
     public function startQuery($sql, array $params = null, array $types = null)
     {
-        $this->info($sql);
+        $this->debug($sql);
     }
 
     /**

@@ -19,6 +19,7 @@ use Doctrine\ORM\Tools\Console\ConsoleRunner;
 use Doctrine\ORM\Tools\Setup;
 use Sinergi\Core\BackgroundPersister\BackgroundPersister;
 use Sinergi\Core\Doctrine\CacheLogger;
+use Sinergi\Core\Doctrine\ListenerInstanciator;
 use Symfony\Component\Console\Command\Command as DoctrineCommand;
 use Symfony\Component\Console\Helper\HelperSet;
 use Exception;
@@ -184,10 +185,11 @@ class Doctrine extends AbstractManagerRegistry
     }
 
     /**
-     * @param EntityManager $em
+     * @param EntityManagerInterface $entityManager
      */
-    public function addListeners(EntityManager $em)
+    public function addListeners(EntityManagerInterface $entityManager)
     {
+        (new ListenerInstanciator())->instanciate($entityManager);
     }
 
     private function addDefaultCommands()

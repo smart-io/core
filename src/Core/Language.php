@@ -142,6 +142,9 @@ class Language
      */
     public function __toString()
     {
-        return substr($this->language, 0, 2);
+        if ($this->language) {
+            return substr($this->language, 0, 2);
+        }
+        return '';
     }
 }

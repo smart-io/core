@@ -10,7 +10,7 @@
         "sinergi/container": "~0.2",
         "sinergi/security": "~0.1",
         "sinergi/sage50": "dev-develop",
-        "sinergi/emailqueue": "~0.1",
+        "sinergi/emailqueue": "dev-develop",
         "sinergi/browsersession": "dev-develop",
         "klein/klein": "dev-master",
         "twig/twig": "~1.15",
