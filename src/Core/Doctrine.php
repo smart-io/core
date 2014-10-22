@@ -189,7 +189,7 @@ class Doctrine extends AbstractManagerRegistry
      */
     public function addListeners(EntityManagerInterface $entityManager)
     {
-        (new ListenerInstanciator())->instanciate($entityManager);
+        (new ListenerInstanciator($this->container))->instanciate($entityManager);
     }
 
     private function addDefaultCommands()
