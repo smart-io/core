@@ -2,9 +2,9 @@
 namespace Sinergi\Core;
 
 use Doctrine\ORM\EntityManager;
-use Klein\Klein;
-use Klein\Request;
-use Klein\Response;
+use Illuminate\Routing\Router;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Psr\Log\LoggerInterface;
 use Sinergi\Config\Config;
 use Sinergi\Dictionary\Dictionary;
@@ -74,15 +74,15 @@ interface ContainerInterface extends \Sinergi\Container\ContainerInterface
     public function setTwig(Twig $twig);
 
     /**
-     * @return Klein
+     * @return Router
      */
-    public function getKlein();
+    public function getRouter();
 
     /**
-     * @param Klein $klein
+     * @param Router $router
      * @return $this
      */
-    public function setKlein(Klein $klein);
+    public function setRouter(Router $router);
 
     /**
      * @return ConsoleApplication

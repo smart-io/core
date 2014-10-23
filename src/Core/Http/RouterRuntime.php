@@ -1,8 +1,9 @@
 <?php
-namespace Sinergi\Core;
+namespace Sinergi\Core\Http;
 
-use Klein\Request;
-use Klein\Response;
+use Sinergi\Core\ContainerInterface;
+use Sinergi\Core\ErrorHandler;
+use Sinergi\Core\RuntimeInterface;
 
 class RouterRuntime implements RuntimeInterface
 {
@@ -34,6 +35,6 @@ class RouterRuntime implements RuntimeInterface
 
     public function run()
     {
-        $this->container->getKlein()->dispatch($this->container->getRequest(), $this->container->getResponse());
+        $this->container->getResponse()->send();
     }
 }

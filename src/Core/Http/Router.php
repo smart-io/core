@@ -1,12 +1,12 @@
 <?php
-namespace Sinergi\Core;
+namespace Sinergi\Core\Http;
 
-use Klein\AbstractResponse;
-use Klein\Response;
+use Sinergi\Core\ComponentRegistryTrait;
 
 abstract class Router implements RouterInterface
 {
     use ComponentRegistryTrait;
+    use HttpContainerTrait;
 
     /**
      * @param string $url

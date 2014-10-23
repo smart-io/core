@@ -2,9 +2,6 @@
 namespace Sinergi\Core;
 
 use Doctrine\ORM\EntityManager;
-use Klein\Klein;
-use Klein\Request;
-use Klein\Response;
 use Psr\Log\LoggerInterface;
 use Sinergi\Config\Config;
 use Sinergi\Core\Doctrine;
@@ -44,50 +41,6 @@ trait ComponentRegistryTrait
             $this->getContainer()->set('browserSession', $browserSession);
         }
         $browserSession->setController($browserSessionController);
-        return $this;
-    }
-
-    /**
-     * @return Request
-     */
-    public function getRequest()
-    {
-        if (null === $this->getContainer()->get('request')) {
-            $this->getContainer()->set('request', Request::createFromGlobals());
-        }
-        return $this->getContainer()->get('request');
-    }
-
-    /**
-     * @param Request $request
-     * @return $this
-     */
-    public function setRequest(Request $request)
-    {
-        $this->getContainer()->set('request', $request);
-        return $this;
-    }
-
-    /**
-     * @return Response
-     */
-    public function getResponse()
-    {
-        if (!$response = $this->getContainer()->get('response')) {
-            $response = new Response();
-            $this->getKlein()->setResponse($response);
-            $this->getContainer()->set('response', $response);
-        }
-        return $response;
-    }
-
-    /**
-     * @param Response $response
-     * @return $this
-     */
-    public function setResponse(Response $response)
-    {
-        $this->getContainer()->set('response', $response);
         return $this;
     }
 
@@ -175,27 +128,6 @@ trait ComponentRegistryTrait
     public function setTwig(Twig $twig)
     {
         $this->getContainer()->set('twig', $twig);
-        return $this;
-    }
-
-    /**
-     * @return Klein
-     */
-    public function getKlein()
-    {
-        if (null === $this->getContainer()->get('klein')) {
-            $this->getContainer()->set('klein', new Klein());
-        }
-        return $this->getContainer()->get('klein');
-    }
-
-    /**
-     * @param Klein $klein
-     * @return $this
-     */
-    public function setKlein(Klein $klein)
-    {
-        $this->getContainer()->set('klein', $klein);
         return $this;
     }
 

@@ -1,8 +1,8 @@
 <?php
 namespace Sinergi\Core;
 
-use Klein\Request;
-use Klein\Response;
+use Illuminate\Http\Response;
+use Illuminate\Http\Request;
 
 abstract class View
 {
@@ -31,10 +31,11 @@ abstract class View
     /**
      * @param null|string $body
      * @return Response|string
+     * @deprecated
      */
     public function body($body = null)
     {
-        return $this->getResponse()->body($body);
+        return $this->getResponse()->setContent($body);
     }
 
     /**
@@ -111,10 +112,11 @@ abstract class View
     /**
      * @param int $code
      * @return int|Response
+     * @deprecated
      */
     public function code($code = null)
     {
-        return $this->getResponse()->code($code);
+        return $this->getResponse()->setStatusCode($code);
     }
 
     /**

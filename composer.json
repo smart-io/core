@@ -12,7 +12,6 @@
         "sinergi/sage50": "dev-develop",
         "sinergi/emailqueue": "dev-develop",
         "sinergi/browsersession": "dev-develop",
-        "klein/klein": "dev-master",
         "illuminate/routing": "5.0.*@dev",
         "twig/twig": "~1.15",
         "symfony/console": "~2.5",
