@@ -13,6 +13,7 @@
         "sinergi/emailqueue": "dev-develop",
         "sinergi/browsersession": "dev-develop",
         "klein/klein": "dev-master",
+        "illuminate/routing": "5.0.*@dev",
         "twig/twig": "~1.15",
         "symfony/console": "~2.5",
         "doctrine/orm": "dev-master",
@@ -22,6 +23,10 @@
         "jms/serializer": "~0.16",
         "predis/predis": "~1.0"
     },
+
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+
     "require-dev": {
         "facebook/xhprof": "dev-master",
         "phpunit/phpunit": "~4",
