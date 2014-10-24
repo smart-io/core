@@ -35,6 +35,9 @@ class RouterRuntime implements RuntimeInterface
 
     public function run()
     {
-        $this->container->getResponse()->send();
+        $this->container->getRouter()->dispatch(
+            $this->container->getRequest(),
+            $this->container->getResponse()
+        );
     }
 }

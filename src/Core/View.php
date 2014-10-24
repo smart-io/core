@@ -1,8 +1,8 @@
 <?php
 namespace Sinergi\Core;
 
-use Illuminate\Http\Response;
-use Illuminate\Http\Request;
+use Router\Response;
+use Router\Request;
 
 abstract class View
 {
@@ -35,7 +35,7 @@ abstract class View
      */
     public function body($body = null)
     {
-        return $this->getResponse()->setContent($body);
+        return $this->getResponse()->body($body);
     }
 
     /**
@@ -43,6 +43,7 @@ abstract class View
      * @param string $jsonp_prefix
      * @param null|array $mask
      * @return void
+     * @deprecated
      */
     public function json($object, $jsonp_prefix = null, array $mask = null)
     {
@@ -63,36 +64,11 @@ abstract class View
     }
 
     /**
-     * Sets a response cookie
-     *
-     * @param string $key The name of the cookie
-     * @param string $value The value to set the cookie with
-     * @param int $expiry The time that the cookie should expire
-     * @param string $path The path of which to restrict the cookie
-     * @param string $domain The domain of which to restrict the cookie
-     * @param boolean $secure Flag of whether the cookie should only be sent over a HTTPS connection
-     * @param boolean $httponly Flag of whether the cookie should only be accessible over the HTTP protocol
-     * @access public
-     * @return Response
-     */
-    public function cookie(
-        $key,
-        $value = '',
-        $expiry = null,
-        $path = '/',
-        $domain = null,
-        $secure = false,
-        $httponly = false
-    )
-    {
-        return $this->getResponse()->cookie($key, $value, $expiry, $path, $domain, $secure, $httponly);
-    }
-
-    /**
      * Returns the cookies collection
      *
      * @access public
      * @return \Klein\DataCollection\ResponseCookieDataCollection
+     * @deprecated
      */
     public function cookies()
     {
@@ -103,6 +79,7 @@ abstract class View
      * @param string $url
      * @param int $code
      * @return Response
+     * @deprecated
      */
     public function redirect($url, $code = 302)
     {
@@ -116,13 +93,14 @@ abstract class View
      */
     public function code($code = null)
     {
-        return $this->getResponse()->setStatusCode($code);
+        return $this->getResponse()->code($code);
     }
 
     /**
      * @param string $name
      * @param array $context
      * @return string
+     * @deprecated
      */
     public function render($name, array $context = [])
     {
@@ -135,6 +113,7 @@ abstract class View
     /**
      * @param $key
      * @return null|mixed
+     * @deprecated
      */
     public function getParam($key)
     {
@@ -148,6 +127,7 @@ abstract class View
     /**
      * @param array $mask
      * @return array
+     * @deprecated
      */
     public function getParams(array $mask = null)
     {

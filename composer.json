@@ -1,5 +1,6 @@
 {
     "name": "sinergi/core",
+
     "require": {
         "sinergi/devtools": "~0.2",
         "sinergi/config": "~0.4",
@@ -22,15 +23,15 @@
         "jms/serializer": "~0.16",
         "predis/predis": "~1.0"
     },
-
-    "minimum-stability": "dev",
-    "prefer-stable": true,
-
     "require-dev": {
         "facebook/xhprof": "dev-master",
         "phpunit/phpunit": "~4",
         "phpunit/dbunit": "dev-master"
     },
+
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+
     "autoload": {
         "psr-4": {
             "Sinergi\\Core\\": "src/Core"
