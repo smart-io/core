@@ -1,9 +1,9 @@
 <?php
 namespace Sinergi\Core\Http;
 
-use Illuminate\Routing\Router;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Router\Router;
+use Router\Request;
+use Router\Response;
 use Sinergi\Core\ContainerInterface;
 
 class Http
@@ -26,7 +26,7 @@ class Http
      */
     public function createRouter()
     {
-        return new Router(new EventDispatcher());
+        return new Router();
     }
 
     /**
@@ -42,9 +42,9 @@ class Http
      */
     public function createRequest()
     {
-        return Request::createFromBase(
-            \Symfony\Component\HttpFoundation\Request::createFromGlobals()
-        );
+        $request = Request::createFromGlobals();
+        $this->container->getRouter()->setRequest($request);
+        return $request;
     }
 
     /**
@@ -52,6 +52,8 @@ class Http
      */
     public function createResponse()
     {
-        return new Response();
+        $response = new Response;
+        $this->container->getRouter()->setResponse($response);
+        return $response;
     }
 }

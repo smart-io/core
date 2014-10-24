@@ -12,7 +12,7 @@
         "sinergi/sage50": "dev-develop",
         "sinergi/emailqueue": "dev-develop",
         "sinergi/browsersession": "dev-develop",
-        "illuminate/routing": "5.0.*@dev",
+        "gabrielbull/router": "dev-develop",
         "twig/twig": "~1.15",
         "symfony/console": "~2.5",
         "doctrine/orm": "dev-master",

@@ -1,9 +1,9 @@
 <?php
 namespace Sinergi\Core\Http;
 
-use Illuminate\Routing\Router;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Router\Router;
+use Router\Request;
+use Router\Response;
 use Sinergi\Core\ContainerInterface;
 
 trait HttpContainerTrait
