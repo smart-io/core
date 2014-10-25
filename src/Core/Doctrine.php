@@ -376,7 +376,8 @@ class Doctrine extends AbstractManagerRegistry
         $connection->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
 
         if (isset($connectionConfig['debug']) && $connectionConfig['debug'] === true) {
-            $connection->getConfiguration()->setSQLLogger(new SqlLogger($this->container));
+            $this->sqlLogger = new SqlLogger($this->container);
+            $connection->getConfiguration()->setSQLLogger($this->sqlLogger);
         }
 
         $this->addListeners($entityManager);
@@ -424,6 +425,9 @@ class Doctrine extends AbstractManagerRegistry
      */
     public function getSqlLogger()
     {
+        if (null === $this->sqlLogger) {
+            $this->createEntityManager();
+        }
         return $this->sqlLogger;
     }
 

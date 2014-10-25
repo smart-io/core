@@ -3,7 +3,7 @@ namespace Sinergi\Core\BrowserSession;
 
 use Sinergi\BrowserSession\BrowserSessionController;
 use Sinergi\BrowserSession\CacheDriver\PredisDriver;
-use Sinergi\BrowserSession\RouterDriver\KleinDriver;
+use Sinergi\BrowserSession\RouterDriver\SinergiDriver;
 use Sinergi\Core\ContainerInterface;
 
 class BrowserSession
@@ -20,7 +20,7 @@ class BrowserSession
     {
         $this->controller = new BrowserSessionController(
             new DatabaseDriver($container),
-            new KleinDriver($container->getKlein()),
+            new SinergiDriver($container->getRouter()),
             new PredisDriver($container->getPredis()->getClient())
         );
     }

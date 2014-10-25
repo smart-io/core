@@ -82,6 +82,7 @@ class BackgroundPersisterJob extends Job
             $entityManager->persist($entity);
             $entityManager->flush();
         } catch (\Exception $e) {
+            $this->getContainer()->getDoctrine()->getSqlLogger()->error($e->getMessage());
         }
     }
 
@@ -98,6 +99,7 @@ class BackgroundPersisterJob extends Job
             $entityManager->merge($entity);
             $entityManager->flush();
         } catch (\Exception $e) {
+            $this->getContainer()->getDoctrine()->getSqlLogger()->error($e->getMessage());
         }
     }
 
@@ -118,6 +120,7 @@ class BackgroundPersisterJob extends Job
                 $entityManager->persist($entity);
                 $entityManager->flush();
             } catch (\Exception $e) {
+                $this->getContainer()->getDoctrine()->getSqlLogger()->error($e->getMessage());
             }
         }
     }
