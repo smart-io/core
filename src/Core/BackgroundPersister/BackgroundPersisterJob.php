@@ -6,6 +6,7 @@ use GearmanJob;
 use Sinergi\Core\ContainerInterface;
 use Sinergi\Core\Job;
 
+// todo rename to database deferrer
 class BackgroundPersisterJob extends Job
 {
     const JOB_NAME = 'backgroundpersister';

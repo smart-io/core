@@ -4,6 +4,7 @@ namespace Sinergi\Core\BackgroundPersister;
 use Doctrine\ORM\EntityManagerInterface;
 use Sinergi\Core\ContainerInterface;
 
+// todo rename to database deferrer
 class BackgroundPersister
 {
     /**
