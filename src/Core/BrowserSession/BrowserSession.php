@@ -20,7 +20,7 @@ class BrowserSession
     {
         $this->controller = new BrowserSessionController(
             new DatabaseDriver($container),
-            new SinergiDriver($container->getRouter()),
+            new SinergiDriver($container->getRouter(), $container->getRequest(), $container->getResponse()),
             new PredisDriver($container->getPredis()->getClient())
         );
     }
