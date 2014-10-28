@@ -1,5 +1,5 @@
 <?php
-namespace Sinergi\Core;
+namespace Sinergi\Core\Cache;
 
 interface CacheableInterface
 {

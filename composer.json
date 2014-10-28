@@ -35,7 +35,8 @@
     "autoload": {
         "psr-4": {
             "Sinergi\\Core\\": "src/Core"
-        }
+        },
+        "classmap": [ "stubs/Psr/Cache" ]
     },
     "autoload-dev": {
         "psr-4": {
