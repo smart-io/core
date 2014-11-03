@@ -1,7 +1,6 @@
 <?php
 namespace Sinergi\Core\TestCase;
 
-use Doctrine\ORM\Tools\SchemaTool;
 use PHPUnit_Extensions_Database_DataSet_CompositeDataSet;
 use PHPUnit_Extensions_Database_DataSet_DefaultDataSet;
 use PHPUnit_Extensions_Database_DataSet_IDataSet;
@@ -11,6 +10,9 @@ use PHPUnit_Extensions_Database_Operation_Composite;
 use PHPUnit_Extensions_Database_Operation_Factory;
 use PHPUnit_Extensions_Database_Operation_Truncate;
 use PHPUnit_Extensions_Database_TestCase;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Tools\SchemaTool;
+use Doctrine\ORM\Mapping\ClassMetadata;
 
 /**
  * Executes a mysql 5.5 safe truncate against all tables in a dataset.
@@ -43,6 +45,21 @@ abstract class DatabaseTestCase extends PHPUnit_Extensions_Database_TestCase
      */
     private static $connection;
 
+    /**
+     * @var SchemaTool
+     */
+    private static $tool;
+
+    /**
+     * @var EntityManagerInterface
+     */
+    private static $em;
+
+    /**
+     * @var array|ClassMetadata[]
+     */
+    private static $classes;
+
     public function __construct()
     {
         $this->initTestCaseTrait();
@@ -55,13 +72,31 @@ abstract class DatabaseTestCase extends PHPUnit_Extensions_Database_TestCase
     {
         $tables = func_get_args();
 
+        $em = $this->container->getDoctrine()->getEntityManager();
+        $connection = $em->getConnection();
+        $platform = $connection->getDatabasePlatform();
+
         $dataset = [];
         foreach ($tables as $table) {
             ltrim($table, '/');
+            $this->createSchema($table);
             $dataset[] = $this->createMySQLXMLDataSet($this->getTestDir() . "/_files/DataSets/{$table}.xml");
         }
 
         return new PHPUnit_Extensions_Database_DataSet_CompositeDataSet($dataset);
+    }
+
+    public function createSchema($table)
+    {
+        foreach (self::$classes as $meta) {
+            if (
+                $table === $meta->getTableName() ||
+                ".{$table}" === substr($meta->getTableName(), -strlen(".{$table}"))
+            ) {
+                self::$tool->dropSchema([$meta]);
+                self::$tool->createSchema([$meta]);
+            }
+        }
     }
 
     public function truncate()
@@ -100,11 +135,9 @@ abstract class DatabaseTestCase extends PHPUnit_Extensions_Database_TestCase
         $pdo = $em->getConnection()->getWrappedConnection();
         $em->clear();
 
-        $tool = new SchemaTool($em);
-        $classes = $em->getMetaDataFactory()->getAllMetaData();
-
-        $tool->dropSchema($classes);
-        $tool->createSchema($classes);
+        self::$em = $em;
+        self::$tool = new SchemaTool($em);
+        self::$classes = self::$em->getMetaDataFactory()->getAllMetaData();
 
         self::$connection = $this->createDefaultDBConnection($pdo, ':memory:');;
         return self::$connection;
