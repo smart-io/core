@@ -75,7 +75,10 @@ abstract class DatabaseTestCase extends PHPUnit_Extensions_Database_TestCase
         foreach ($tables as $table) {
             ltrim($table, '/');
             $this->createSchema($table);
-            $dataset[] = $this->createMySQLXMLDataSet($this->getTestDir() . "/_files/DataSets/{$table}.xml");
+            $file = $this->getTestDir() . "/_files/DataSets/{$table}.xml";
+            if (file_exists($file)) {
+                $dataset[] = $this->createMySQLXMLDataSet($this->getTestDir() . "/_files/DataSets/{$table}.xml");
+            }
         }
 
         return new PHPUnit_Extensions_Database_DataSet_CompositeDataSet($dataset);
