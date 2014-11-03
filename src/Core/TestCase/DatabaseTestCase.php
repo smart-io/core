@@ -60,11 +60,6 @@ abstract class DatabaseTestCase extends PHPUnit_Extensions_Database_TestCase
      */
     private static $classes;
 
-    public function __construct()
-    {
-        $this->initTestCaseTrait();
-    }
-
     /**
      * @return PHPUnit_Extensions_Database_DataSet_CompositeDataSet
      */
@@ -72,7 +67,7 @@ abstract class DatabaseTestCase extends PHPUnit_Extensions_Database_TestCase
     {
         $tables = func_get_args();
 
-        $em = $this->container->getDoctrine()->getEntityManager();
+        $em = $this->getContainer()->getDoctrine()->getEntityManager();
         $connection = $em->getConnection();
         $platform = $connection->getDatabasePlatform();
 
@@ -103,7 +98,7 @@ abstract class DatabaseTestCase extends PHPUnit_Extensions_Database_TestCase
     {
         $tables = func_get_args();
 
-        $em = $this->container->getDoctrine()->getEntityManager();
+        $em = $this->getContainer()->getDoctrine()->getEntityManager();
         $connection = $em->getConnection();
         $platform = $connection->getDatabasePlatform();
 
@@ -131,7 +126,7 @@ abstract class DatabaseTestCase extends PHPUnit_Extensions_Database_TestCase
      */
     public function getConnection()
     {
-        $em = $this->container->getDoctrine()->createEntityManager();
+        $em = $this->getContainer()->getDoctrine()->createEntityManager();
         $pdo = $em->getConnection()->getWrappedConnection();
         $em->clear();
 

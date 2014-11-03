@@ -6,6 +6,11 @@ use Sinergi\Core\ContainerInterface;
 trait TestCaseTrait
 {
     /**
+     * @var bool
+     */
+    private $isTraitInitiated = false;
+
+    /**
      * @return ContainerInterface
      */
     protected $container;
@@ -27,6 +32,7 @@ trait TestCaseTrait
 
     protected function initTestCaseTrait()
     {
+        $this->isTraitInitiated = true;
         /** @var \Sinergi\Core\App $app */
         global $app;
         $this->container = $app->getContainer();
@@ -40,6 +46,9 @@ trait TestCaseTrait
      */
     protected function getRootDir()
     {
+        if (!$this->isTraitInitiated) {
+            $this->initTestCaseTrait();
+        }
         return $this->rootDir;
     }
 
@@ -49,6 +58,9 @@ trait TestCaseTrait
      */
     protected function setRootDir($rootDir)
     {
+        if (!$this->isTraitInitiated) {
+            $this->initTestCaseTrait();
+        }
         $this->rootDir = $rootDir;
         return $this;
     }
@@ -58,6 +70,9 @@ trait TestCaseTrait
      */
     protected function getSrcDir()
     {
+        if (!$this->isTraitInitiated) {
+            $this->initTestCaseTrait();
+        }
         return $this->srcDir;
     }
 
@@ -67,6 +82,9 @@ trait TestCaseTrait
      */
     protected function setSrcDir($srcDir)
     {
+        if (!$this->isTraitInitiated) {
+            $this->initTestCaseTrait();
+        }
         $this->srcDir = $srcDir;
         return $this;
     }
@@ -76,6 +94,9 @@ trait TestCaseTrait
      */
     protected function getTestDir()
     {
+        if (!$this->isTraitInitiated) {
+            $this->initTestCaseTrait();
+        }
         return $this->testDir;
     }
 
@@ -85,7 +106,21 @@ trait TestCaseTrait
      */
     protected function setTestDir($testDir)
     {
+        if (!$this->isTraitInitiated) {
+            $this->initTestCaseTrait();
+        }
         $this->testDir = $testDir;
         return $this;
+    }
+
+    /**
+     * @return ContainerInterface
+     */
+    public function getContainer()
+    {
+        if (!$this->isTraitInitiated) {
+            $this->initTestCaseTrait();
+        }
+        return $this->container;
     }
 }
