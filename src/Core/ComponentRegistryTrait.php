@@ -4,7 +4,7 @@ namespace Sinergi\Core;
 use Doctrine\ORM\EntityManager;
 use Psr\Log\LoggerInterface;
 use Sinergi\Config\Config;
-use Sinergi\Core\Doctrine;
+use Sinergi\Core\Doctrine\Doctrine;
 use Sinergi\Dictionary\Dictionary;
 use Sinergi\Gearman\Dispatcher as GearmanDispatcher;
 use Symfony\Component\Console\Application as ConsoleApplication;

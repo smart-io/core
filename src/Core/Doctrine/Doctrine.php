@@ -1,5 +1,5 @@
 <?php
-namespace Sinergi\Core;
+namespace Sinergi\Core\Doctrine;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
@@ -18,6 +18,7 @@ use Doctrine\ORM\ORMException;
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
 use Doctrine\ORM\Tools\Setup;
 use Sinergi\Core\BackgroundPersister\BackgroundPersister;
+use Sinergi\Core\ContainerInterface;
 use Sinergi\Core\Doctrine\CacheLogger;
 use Sinergi\Core\Doctrine\ListenerInstanciator;
 use Symfony\Component\Console\Command\Command as DoctrineCommand;
@@ -25,6 +26,7 @@ use Symfony\Component\Console\Helper\HelperSet;
 use Exception;
 use Doctrine\Common\Cache\Cache;
 use Sinergi\Core\Doctrine\SqlLogger;
+use Sinergi\Core\Command;
 
 class Doctrine extends AbstractManagerRegistry
 {

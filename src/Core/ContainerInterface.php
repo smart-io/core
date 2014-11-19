@@ -6,6 +6,7 @@ use Router\Router;
 use Router\Request;
 use Router\Response;
 use Psr\Log\LoggerInterface;
+use Sinergi\Core\Doctrine\Doctrine;
 use Sinergi\Config\Config;
 use Sinergi\Dictionary\Dictionary;
 use Sinergi\Gearman\Dispatcher as GearmanDispatcher;

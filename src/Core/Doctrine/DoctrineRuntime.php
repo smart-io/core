@@ -1,7 +1,9 @@
 <?php
-namespace Sinergi\Core;
+namespace Sinergi\Core\Doctrine;
 
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
+use Sinergi\Core\ContainerInterface;
+use Sinergi\Core\RuntimeInterface;
 use Symfony\Component\Console\Helper\HelperSet;
 
 class DoctrineRuntime implements RuntimeInterface

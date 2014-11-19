@@ -3,6 +3,7 @@ namespace Sinergi\Core;
 
 use Sinergi\Container\Application;
 use Sinergi\Container\ApplicationInterface;
+use Sinergi\Core\Doctrine\DoctrineRuntime;
 use Sinergi\Core\Http\RouterRuntime;
 
 abstract class App extends Application implements ApplicationInterface
