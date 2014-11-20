@@ -67,7 +67,24 @@ class Twig
 
         $paths = $config->get('twig.paths');
         if (isset($paths)) {
-            $loader = new Twig_Loader_Filesystem($paths);
+            $loader = new Twig_Loader_Filesystem();
+            $firstPath = null;
+            $hasMain = false;
+            foreach ($paths as $namespace => $path) {
+                if (null === $firstPath) {
+                    $firstPath = $path;
+                }
+                if (is_int($namespace)) {
+                    $hasMain = true;
+                    $loader->addPath($path);
+                } else {
+                    $loader->addPath($path, $namespace);
+                }
+            }
+            if (!$hasMain && null !== $firstPath) {
+                $loader->addPath($firstPath);
+
+            }
         } else {
             $loader = new Twig_Loader_String();
         }
