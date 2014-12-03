@@ -75,6 +75,7 @@ trait HttpContainerTrait
 
     /**
      * @return Request
+     * @deprecated
      */
     public function getRequest()
     {
@@ -83,6 +84,11 @@ trait HttpContainerTrait
             $this->getContainer()->set('request', $request);
         }
         return $request;
+    }
+
+    public function getPsrRequest()
+    {
+        return $this->getRouter()->getRequest();
     }
 
     /**

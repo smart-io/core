@@ -43,7 +43,7 @@ class Http
     public function createRequest()
     {
         $request = Request::createFromGlobals();
-        $this->container->getRouter()->setRequest($request);
+        $this->container->getRouter()->request($request);
         return $request;
     }
 
