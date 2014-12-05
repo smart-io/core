@@ -54,7 +54,7 @@ abstract class AbstractCacheItemPool implements CacheItemPoolInterface
         }
 
         if ($item) {
-            unserialize($item);
+            $item = unserialize($item);
 
             if ($item instanceof CacheItemInterface && $item->getExpiration() <= new DateTime()) {
                 $this->items[$item->getKey()] = $item;

@@ -69,8 +69,9 @@ abstract class AbstractCacheItem implements CacheItemInterface
     public function get()
     {
         $serializer = SerializerBuilder::create()->build();
+
         $item = $serializer->deserialize(
-            $this->value,
+            (string)$this->value,
             $this->getType(),
             'json'
         );
