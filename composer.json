@@ -17,7 +17,7 @@
         "twig/twig": "~1.15",
         "symfony/console": "~2.5",
         "doctrine/orm": "dev-master",
-        "doctrine/dbal": "dev-master",
+        "doctrine/dbal": "2.5.x-dev",
         "psr/log": "~1",
         "cocur/slugify": "~0.10",
         "jms/serializer": "~0.16",
