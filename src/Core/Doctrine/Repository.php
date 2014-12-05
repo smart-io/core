@@ -7,9 +7,16 @@ use Sinergi\Core\ContainerInterface;
 
 class Repository extends EntityRepository
 {
+    /**
+     * @var array
+     */
     protected $repositoriesContainer = [];
 
+    /**
+     * @var EntityManagerInterface
+     */
     protected $entityManager;
+
     /**
      * @var ContainerInterface
      */
@@ -50,16 +57,28 @@ class Repository extends EntityRepository
         $this->repositoriesContainer[$entityClass] = $repository;
     }
 
+    /**
+     * @param string $entityClass
+     * @return bool
+     */
     public function exists($entityClass)
     {
         return isset($this->repositoriesContainer[$entityClass]);
     }
 
+    /**
+     * @param string $entityClass
+     * @return Repository|EntityRepository
+     */
     public function get($entityClass)
     {
         return $this->repositoriesContainer[$entityClass];
     }
 
+    /**
+     * @param string $entityClass
+     * @param null|string $repositoryClass
+     */
     public function create($entityClass, $repositoryClass = null)
     {
         if (null !== $repositoryClass) {
@@ -79,5 +98,23 @@ class Repository extends EntityRepository
             $repository = $this->getEntityManager()->getRepository($entityClass);
         }
         $this->add($entityClass, $repository);
+    }
+
+    /**
+     * @return ContainerInterface
+     */
+    public function getContainer()
+    {
+        return $this->container;
+    }
+
+    /**
+     * @param ContainerInterface $container
+     * @return $this
+     */
+    public function setContainer(ContainerInterface $container)
+    {
+        $this->container = $container;
+        return $this;
     }
 }
