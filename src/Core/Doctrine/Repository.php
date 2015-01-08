@@ -28,11 +28,19 @@ class Repository extends EntityRepository
      * @param null $entityClass
      */
     public function __construct(
-        ContainerInterface $container,
-        EntityManagerInterface $entityManager = null,
+        $container = null,
+        $entityManager = null,
         $entityClass = null
     )
     {
+        if ($container instanceof EntityManagerInterface) {
+            parent::__construct(
+                $container,
+                $entityManager
+            );
+            return;
+        }
+
         $this->container = $container;
         if (null !== $entityManager) {
             $this->entityManager = $entityManager;
