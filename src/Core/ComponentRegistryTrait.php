@@ -125,7 +125,7 @@ trait ComponentRegistryTrait
      * @param Twig $twig
      * @return $this
      */
-    public function setTwig(Twig $twig)
+    public function setTwig($twig)
     {
         $this->getContainer()->set('twig', $twig);
         return $this;
