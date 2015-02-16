@@ -72,7 +72,7 @@ interface ContainerInterface extends \Sinergi\Container\ContainerInterface
      * @param Twig $twig
      * @return $this
      */
-    public function setTwig(Twig $twig);
+    public function setTwig($twig);
 
     /**
      * @return Router
