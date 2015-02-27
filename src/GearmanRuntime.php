@@ -36,7 +36,7 @@ class GearmanRuntime implements RuntimeInterface
         $daemon = true;
         $command = $_SERVER['argv'][1];
         if (stripos($_SERVER['argv'][2], '--daemon=') === 0) {
-            if ($_SERVER['argv'][2] === '--daemon=false') {
+            if ($_SERVER['argv'][2] === '--daemon=false' || $_SERVER['argv'][2] === '--daemon=0') {
                 $daemon = false;
             }
         }
