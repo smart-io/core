@@ -1,46 +1,46 @@
 {
-    "name": "sinergi/core",
-
-    "require": {
-        "sinergi/devtools": "dev-develop",
-        "sinergi/config": "~0.4",
-        "sinergi/dictionary": "~0.2",
-        "sinergi/gearman": "~0.5",
-        "sinergi/token": "~0.1",
-        "sinergi/validation": "~0.2",
-        "sinergi/container": "~0.2",
-        "sinergi/security": "~0.1",
-        "sinergi/sage50": "dev-develop",
-        "sinergi/emailqueue": "dev-develop",
-        "sinergi/browsersession": "dev-develop",
-        "gabrielbull/router": "dev-develop",
-        "twig/twig": "~1.15",
-        "symfony/console": "~2.5",
-        "doctrine/orm": "dev-master",
-        "doctrine/dbal": "2.5.x-dev",
-        "psr/log": "~1",
-        "cocur/slugify": "~0.10",
-        "jms/serializer": "~0.16",
-        "predis/predis": "~1.0"
+  "name": "sinergi/core",
+  "require": {
+    "sinergi/devtools": "dev-develop",
+    "sinergi/config": "~0.4",
+    "sinergi/dictionary": "~0.2",
+    "sinergi/gearman": "~0.5",
+    "sinergi/token": "~0.1",
+    "sinergi/validation": "~0.2",
+    "sinergi/container": "~0.2",
+    "sinergi/security": "~0.1",
+    "sinergi/sage50": "dev-develop",
+    "sinergi/browsersession": "dev-develop",
+    "smart/emailqueue": "~0.1",
+    "gabrielbull/router": "dev-develop",
+    "twig/twig": "~1.15",
+    "symfony/console": "~2.5",
+    "doctrine/orm": "dev-master",
+    "doctrine/dbal": "2.5.x-dev",
+    "psr/log": "~1",
+    "cocur/slugify": "~1",
+    "jms/serializer": "~0.16",
+    "predis/predis": "~1.0"
+  },
+  "require-dev": {
+    "facebook/xhprof": "dev-master",
+    "phpunit/phpunit": "~4",
+    "phpunit/dbunit": "dev-master"
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "autoload": {
+    "psr-4": {
+      "Sinergi\\Core\\": "src/Core"
     },
-    "require-dev": {
-        "facebook/xhprof": "dev-master",
-        "phpunit/phpunit": "~4",
-        "phpunit/dbunit": "dev-master"
-    },
-
-    "minimum-stability": "dev",
-    "prefer-stable": true,
-
-    "autoload": {
-        "psr-4": {
-            "Sinergi\\Core\\": "src/Core"
-        },
-        "classmap": [ "stubs/Psr/Cache" ]
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Sinergi\\Core\\Tests\\": ["tests/Core/Tests", "tests/Core/Tests/_includes"]
-        }
+    "classmap": ["stubs/Psr/Cache"]
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Sinergi\\Core\\Tests\\": [
+        "tests/Core/Tests",
+        "tests/Core/Tests/_includes"
+      ]
     }
+  }
 }

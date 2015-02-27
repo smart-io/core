@@ -1,7 +1,7 @@
 <?php
 namespace Sinergi\Core\EmailQueue;
 
-use Sinergi\EmailQueue\ConfigInterface;
+use Smart\EmailQueue\ConfigInterface;
 use Sinergi\Config\Config as SinergiConfig;
 
 class Config implements ConfigInterface

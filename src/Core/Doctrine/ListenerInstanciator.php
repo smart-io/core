@@ -4,7 +4,7 @@ namespace Sinergi\Core\Doctrine;
 use Doctrine\ORM\EntityManagerInterface;
 use Sinergi\Core\ContainerInterface;
 use Sinergi\Core\EmailQueue\Config;
-use Sinergi\EmailQueue\Doctrine\MappingListener as EmailQueueMappingListener;
+use Smart\EmailQueue\Doctrine\MappingListener as EmailQueueMappingListener;
 
 class ListenerInstanciator
 {
