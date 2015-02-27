@@ -33,14 +33,20 @@ class GearmanRuntime implements RuntimeInterface
 
     public function run()
     {
+        $daemon = true;
         $command = $_SERVER['argv'][1];
+        if (stripos($_SERVER['argv'][2], '--daemon=') === 0) {
+            if ($_SERVER['argv'][2] === '--daemon=false') {
+                $daemon = false;
+            }
+        }
 
         if ($command === 'start') {
-            $this->startGearman();
+            $this->startGearman(false, $daemon);
         } elseif ($command === 'stop') {
             $this->stopGearman();
         } elseif ($command === 'restart') {
-            $this->startGearman(true);
+            $this->startGearman(true, $daemon);
         }
     }
 
@@ -55,8 +61,9 @@ class GearmanRuntime implements RuntimeInterface
 
     /**
      * @param bool $restart
+     * @param bool $daemon
      */
-    private function startGearman($restart = false)
+    private function startGearman($restart = false, $daemon = true)
     {
         if (!$restart) {
             $command = new StartCommand();
@@ -66,6 +73,7 @@ class GearmanRuntime implements RuntimeInterface
         $command->setConfig($this->container->getGearman()->getConfig());
         $command->setGearmanApplication($this->container->getGearman()->getApplication());
         $command->setProcess($this->container->getGearman()->getProcess());
+        $command->setIsDaemon($daemon);
         $command->run(new ArrayInput([]), new ConsoleOutput());
     }
 }

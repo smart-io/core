@@ -4,7 +4,7 @@
     "sinergi/devtools": "dev-develop",
     "sinergi/config": "~0.4",
     "sinergi/dictionary": "~0.2",
-    "sinergi/gearman": "~0.5",
+    "sinergi/gearman": "~0.6",
     "sinergi/token": "~0.1",
     "sinergi/validation": "~0.2",
     "sinergi/container": "~0.2",
