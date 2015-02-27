@@ -8,7 +8,7 @@
          stopOnFailure="false"
          syntaxCheck="false">
     <testsuites>
-        <testsuite name="Sinergi Core Test Suite">
+        <testsuite name="Smart Core Test Suite">
             <directory>./tests/Core/Tests/</directory>
         </testsuite>
     </testsuites>

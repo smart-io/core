@@ -1,5 +1,6 @@
 <?php
-namespace Sinergi\Core\Tests;
+
+namespace Smart\Core\Tests;
 
 use PHPUnit_Framework_TestCase;
 

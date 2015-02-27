@@ -1,5 +1,5 @@
 {
-  "name": "sinergi/core",
+  "name": "smart/core",
   "require": {
     "sinergi/devtools": "dev-develop",
     "sinergi/config": "~0.4",
@@ -31,13 +31,13 @@
   "prefer-stable": true,
   "autoload": {
     "psr-4": {
-      "Sinergi\\Core\\": "src/Core"
+      "Smart\\Core\\": "src"
     },
     "classmap": ["stubs/Psr/Cache"]
   },
   "autoload-dev": {
     "psr-4": {
-      "Sinergi\\Core\\Tests\\": [
+      "Smart\\Core\\Tests\\": [
         "tests/Core/Tests",
         "tests/Core/Tests/_includes"
       ]

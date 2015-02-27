@@ -1,7 +1,8 @@
 <?php
-namespace Sinergi\Core\Tests;
 
-use Sinergi\Core;
+namespace Smart\Core\Tests;
+
+use Smart\Core;
 
 class App extends Core\App
 {
