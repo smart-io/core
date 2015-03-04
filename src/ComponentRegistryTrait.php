@@ -95,7 +95,13 @@ trait ComponentRegistryTrait
         if (null === $this->getContainer()->get('dictionary')) {
             $config = $this->getConfig()->get('dictionary');
             $dictionary = (new Dictionary())->setStorage($config['storage']);
-            $dictionary->setLanguage($this->getLanguage()->getLanguage());
+
+            $language = $this->getLanguage()->getLanguage();
+            $dictionary->setLanguage($language);
+
+            if (isset($config['extend'][$language])) {
+                $dictionary->extend($config['extend'][$language]);
+            }
             $this->getContainer()->set('dictionary', $dictionary);
         }
         return $this->getContainer()->get('dictionary');
