@@ -2,7 +2,8 @@
 
 namespace Smart\Core\TestCase;
 
-use Smart\Core\ContainerInterface;
+use Smart\Core\Container;
+use Sinergi\Container\ContainerInterface;
 
 trait TestCaseTrait
 {
@@ -12,7 +13,7 @@ trait TestCaseTrait
     private $isTraitInitiated = false;
 
     /**
-     * @return ContainerInterface
+     * @return Container
      */
     protected $container;
 

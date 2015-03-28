@@ -6,7 +6,8 @@ use DateTime;
 use Predis\Client;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
-use Smart\Core\ContainerInterface;
+use Sinergi\Container\ContainerInterface;
+use Smart\Core\Container;
 
 abstract class AbstractCacheItemPool implements CacheItemPoolInterface
 {
@@ -23,7 +24,7 @@ abstract class AbstractCacheItemPool implements CacheItemPoolInterface
     protected $items = [];
 
     /**
-     * @var ContainerInterface
+     * @var ContainerInterface|Container
      */
     protected $container;
 
@@ -33,7 +34,7 @@ abstract class AbstractCacheItemPool implements CacheItemPoolInterface
     protected $client;
 
     /**
-     * @param ContainerInterface $container
+     * @param ContainerInterface|Container $container
      */
     public function __construct(ContainerInterface $container)
     {

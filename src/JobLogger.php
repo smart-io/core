@@ -4,8 +4,9 @@ namespace Smart\Core;
 
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
+use Sinergi\Container\ContainerInterface;
 
-class GearmanLogger implements LoggerInterface
+class JobLogger implements LoggerInterface
 {
     /**
      * @var string
@@ -18,7 +19,7 @@ class GearmanLogger implements LoggerInterface
     private $file;
 
     /**
-     * @var ContainerInterface
+     * @var Container
      */
     private $container;
 

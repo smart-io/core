@@ -2,10 +2,12 @@
 
 namespace Smart\Core;
 
+use Sinergi\Container\ContainerInterface;
+
 class Serializer
 {
     /**
-     * @var ContainerInterface
+     * @var Container
      */
     private $container;
 

@@ -4,27 +4,25 @@ namespace Smart\Core;
 
 use Sinergi\Container\Application;
 use Sinergi\Container\ApplicationInterface;
-use Smart\Core\Doctrine\DoctrineRuntime;
-use Smart\Core\Http\RouterRuntime;
 
 abstract class App extends Application implements ApplicationInterface
 {
     /**
-     * @return ContainerInterface
+     * @return Container
      */
     abstract public function getContainer();
 
-    const ENV_TEST = 'test';
-    const ENV_DEV = 'dev';
-    const ENV_PROD = 'prod';
-    const ENV_LOCAL = 'local';
-    const ENV_TRAVIS = 'travis';
+    const TEST_ENV = 'test';
+    const DEV_ENV = 'dev';
+    const PROD_ENV = 'prod';
+    const LOCAL_ENV = 'local';
+    const TRAVIS_ENV = 'travis';
 
-    const RUNTIME_COMMAND = 'command';
-    const RUNTIME_DOCTRINE = 'doctrine';
-    const RUNTIME_ROUTER = 'router';
-    const RUNTIME_GEARMAN = 'gearman';
-    const RUNTIME_TEST = 'test';
+    const COMMAND_RUNTIME = 'command';
+    const DOCTRINE_RUNTIME = 'doctrine';
+    const ROUTER_RUNTIME = 'router';
+    const JOB_RUNTIME = 'job';
+    const TEST_RUNTIME = 'test';
 
     const DEFAULT_CONFIG_DIRECTORY = 'config';
 
@@ -36,12 +34,12 @@ abstract class App extends Application implements ApplicationInterface
     /**
      * @var string
      */
-    protected $env = self::ENV_PROD;
+    protected $env = self::PROD_ENV;
 
     /**
      * @var string
      */
-    protected $runtime = self::RUNTIME_COMMAND;
+    protected $runtime = self::COMMAND_RUNTIME;
 
     /**
      * @var string
@@ -60,19 +58,8 @@ abstract class App extends Application implements ApplicationInterface
     protected function configure()
     {
         $config = $this->getContainer()->getConfig();
-        $config->setPath($this->getRootDir() . DIRECTORY_SEPARATOR . $this->getConfigDir());
+        $config->getPaths()->add($this->getRootDir() . DIRECTORY_SEPARATOR . $this->getConfigDir());
         $config->setEnvironment($this->getEnv());
-        if ($config->get('app.timezone')) {
-            date_default_timezone_set($config->get('app.timezone'));
-        }
-        if ($config->get('app.debug')) {
-            error_reporting(E_ALL);
-            ini_set('display_errors', "On");
-        }
-
-        $annotation = new Annotation($this->getContainer());
-        $this->getContainer()->setAnnotation($annotation);
-
         $this->isConfigured = true;
         return $this;
     }
@@ -84,17 +71,17 @@ abstract class App extends Application implements ApplicationInterface
             case 'test':
             case 'tests':
             case 'testing':
-                $this->setEnv(App::ENV_TEST);
+                $this->setEnv(App::TEST_ENV);
                 break;
             case 'development':
             case 'dev':
-                $this->setEnv(App::ENV_DEV);
+                $this->setEnv(App::DEV_ENV);
                 break;
             case 'local':
-                $this->setEnv(App::ENV_LOCAL);
+                $this->setEnv(App::LOCAL_ENV);
                 break;
             default:
-                $this->setEnv(App::ENV_PROD);
+                $this->setEnv(App::PROD_ENV);
                 break;
         }
     }
@@ -111,15 +98,15 @@ abstract class App extends Application implements ApplicationInterface
             $this->setRuntime($runtime);
         }
 
-        if ($runtime === self::RUNTIME_ROUTER) {
+        if ($runtime === self::ROUTER_RUNTIME) {
             $runtime = new RouterRuntime($this->getContainer());
-        } elseif ($runtime === self::RUNTIME_COMMAND) {
+        } elseif ($runtime === self::COMMAND_RUNTIME) {
             $runtime = new CommandRuntime($this->getContainer());
-        } elseif ($runtime === self::RUNTIME_DOCTRINE) {
+        } elseif ($runtime === self::DOCTRINE_RUNTIME) {
             $runtime = new DoctrineRuntime($this->getContainer());
-        } elseif ($runtime === self::RUNTIME_GEARMAN) {
-            $runtime = new GearmanRuntime($this->getContainer());
-        } elseif ($runtime === self::RUNTIME_TEST) {
+        } elseif ($runtime === self::JOB_RUNTIME) {
+            $runtime = new JobRuntime($this->getContainer());
+        } elseif ($runtime === self::TEST_RUNTIME) {
             $runtime = new TestRuntime($this->getContainer());
         }
 

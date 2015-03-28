@@ -2,14 +2,15 @@
 
 namespace Smart\Core\Cache;
 
-use Smart\Core\ContainerInterface;
-use Smart\Core\Command;
+use Sinergi\Container\ContainerInterface;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Smart\Core\Apc\FlushAllCommand as ApcFlushAllCommand;
 use Smart\Core\Redis\FlushAllCommand as RedisFlushAllCommand;
+use Smart\Core\Container;
 
 class FlushAllCommand extends Command
 {
@@ -17,12 +18,12 @@ class FlushAllCommand extends Command
     const COMMAND_NAME = 'flushall';
 
     /**
-     * @var ContainerInterface
+     * @var ContainerInterface|Container
      */
     private $container;
 
     /**
-     * @param ContainerInterface $container
+     * @param ContainerInterface|Container $container
      */
     public function __construct(ContainerInterface $container)
     {
@@ -31,7 +32,7 @@ class FlushAllCommand extends Command
     }
 
     /**
-     * @return ContainerInterface
+     * @return ContainerInterface|Container
      */
     public function getContainer()
     {

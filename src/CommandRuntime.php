@@ -7,11 +7,12 @@ use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Helper\FormatterHelper;
 use Symfony\Component\Console\Output\ConsoleOutput;
+use Sinergi\Container\ContainerInterface;
 
 class CommandRuntime implements RuntimeInterface
 {
     /**
-     * @var ContainerInterface
+     * @var Container
      */
     private $container;
 
@@ -26,7 +27,7 @@ class CommandRuntime implements RuntimeInterface
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
-        $this->app = $container->getConsoleApplication();
+        $this->app = $this->container->getConsoleApplication();
     }
 
     public function configure()

@@ -1,11 +1,11 @@
 <?php
 
-namespace Smart\Core\Doctrine;
+namespace Smart\Core;
 
 use Doctrine\DBAL\Logging\SQLLogger as SqlLoggerInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
-use Smart\Core\ContainerInterface;
+use Sinergi\Container\ContainerInterface;
 
 class SqlLogger implements SqlLoggerInterface, LoggerInterface
 {
@@ -25,12 +25,12 @@ class SqlLogger implements SqlLoggerInterface, LoggerInterface
     private $session;
 
     /**
-     * @var ContainerInterface
+     * @var ContainerInterface|Container
      */
     private $container;
 
     /**
-     * @param ContainerInterface $container
+     * @param ContainerInterface|Container $container
      */
     public function __construct(ContainerInterface $container)
     {

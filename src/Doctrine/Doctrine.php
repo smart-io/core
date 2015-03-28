@@ -3,7 +3,6 @@
 namespace Smart\Core\Doctrine;
 
 use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Cache\ApcCache;
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Persistence\AbstractManagerRegistry;
@@ -12,22 +11,19 @@ use Doctrine\ORM\Cache\RegionsConfiguration;
 use Doctrine\ORM\Cache\CacheFactory;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\DefaultQuoteStrategy;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Doctrine\ORM\ORMException;
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
 use Doctrine\ORM\Tools\Setup;
 use Smart\Core\BackgroundPersister\BackgroundPersister;
-use Smart\Core\ContainerInterface;
-use Smart\Core\Doctrine\CacheLogger;
-use Smart\Core\Doctrine\ListenerInstanciator;
 use Symfony\Component\Console\Command\Command as DoctrineCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\HelperSet;
 use Exception;
 use Doctrine\Common\Cache\Cache;
-use Smart\Core\Doctrine\SqlLogger;
-use Smart\Core\Command;
+use Sinergi\Container\ContainerInterface;
+use Smart\Core\Container;
 
 class Doctrine extends AbstractManagerRegistry
 {
@@ -44,7 +40,7 @@ class Doctrine extends AbstractManagerRegistry
     private $entityManagers;
 
     /**
-     * @var ContainerInterface
+     * @var ContainerInterface|Container
      */
     private $container;
 

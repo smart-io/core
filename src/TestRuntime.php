@@ -2,10 +2,12 @@
 
 namespace Smart\Core;
 
+use Sinergi\Container\ContainerInterface;
+
 class TestRuntime implements RuntimeInterface
 {
     /**
-     * @var ContainerInterface
+     * @var Container
      */
     private $container;
 
@@ -30,12 +32,12 @@ class TestRuntime implements RuntimeInterface
     {
         $travis = getenv('TRAVIS');
         if ($travis) {
-            $this->container->getApp()->setEnv(App::ENV_TRAVIS);
+            $this->container->getApp()->setEnv(App::TRAVIS_ENV);
             $this->container->getConfig()->setEnvironment('travis');
         } elseif (is_array($_SERVER)) {
             foreach ($_SERVER as $key => $value) {
                 if (stripos($key, 'TRAVIS') !== false) {
-                    $this->container->getApp()->setEnv(App::ENV_TRAVIS);
+                    $this->container->getApp()->setEnv(App::TRAVIS_ENV);
                     $this->container->getConfig()->setEnvironment('travis');
                     break;
                 }

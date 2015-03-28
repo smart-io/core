@@ -4,17 +4,18 @@ namespace Smart\Core\BrowserSession;
 
 use Sinergi\BrowserSession\BrowserSessionEntity;
 use Sinergi\BrowserSession\DatabaseDriver\DoctrineDriver;
-use Smart\Core\ContainerInterface;
+use Sinergi\Container\ContainerInterface;
+use Smart\Core\Container;
 
 class DatabaseDriver extends DoctrineDriver
 {
     /**
-     * @var ContainerInterface
+     * @var ContainerInterface|Container
      */
     private $container;
 
     /**
-     * @param ContainerInterface $container
+     * @param ContainerInterface|Container $container
      */
     public function __construct(ContainerInterface $container)
     {

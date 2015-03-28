@@ -1,15 +1,13 @@
 <?php
 
-namespace Smart\Core\Http;
+namespace Smart\Core;
 
-use Smart\Core\ContainerInterface;
-use Smart\Core\ErrorHandler;
-use Smart\Core\RuntimeInterface;
+use Sinergi\Container\ContainerInterface;
 
 class RouterRuntime implements RuntimeInterface
 {
     /**
-     * @var ContainerInterface
+     * @var Container
      */
     private $container;
 
@@ -23,6 +21,11 @@ class RouterRuntime implements RuntimeInterface
 
     public function configure()
     {
+        $config = $this->container->getConfig();
+        if ($config->get('app.timezone')) {
+            date_default_timezone_set($config->get('app.timezone'));
+        }
+
         if ($this->container->getConfig()->get('app.debug')) {
             error_reporting(E_ALL);
             ini_set('display_errors', "On");

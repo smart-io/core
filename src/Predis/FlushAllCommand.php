@@ -2,8 +2,9 @@
 
 namespace Smart\Core\Redis;
 
-use Smart\Core\ContainerInterface;
-use Smart\Core\Command;
+use Smart\Core\Container;
+use Sinergi\Container\ContainerInterface;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -13,7 +14,7 @@ class FlushAllCommand extends Command
     const COMMAND_NAME = 'redis:flushall';
 
     /**
-     * @var ContainerInterface
+     * @var Container
      */
     private $container;
 

@@ -3,19 +3,20 @@
 namespace Smart\Core\Doctrine;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Smart\Core\ContainerInterface;
+use Sinergi\Container\ContainerInterface;
 use Smart\Core\EmailQueue\Config;
 use Smart\EmailQueue\Doctrine\MappingListener as EmailQueueMappingListener;
+use Smart\Core\Container;
 
 class ListenerInstanciator
 {
     /**
-     * @var ContainerInterface
+     * @var ContainerInterface|Container
      */
     private $container;
 
     /**
-     * @param ContainerInterface $container
+     * @param ContainerInterface|Container $container
      */
     public function __construct(ContainerInterface $container)
     {

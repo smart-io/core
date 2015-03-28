@@ -1,15 +1,16 @@
 <?php
 
-namespace Smart\Core;
+namespace Smart\Core\Language;
 
-use Sinergi\Config\Config;
+use Sinergi\Container\ContainerInterface;
+use Smart\Core\Container;
 
 class Language
 {
     /**
-     * @var Config
+     * @var ContainerInterface|Container
      */
-    private $config;
+    private $container;
 
     /**
      * @var string
@@ -27,33 +28,33 @@ class Language
     private $defaultLanguage;
 
     /**
-     * @param Config $config
+     * @param ContainerInterface|Container $container
      */
-    public function __construct(Config $config)
+    public function __construct(ContainerInterface $container)
     {
-        $this->setConfig($config);
-        $this->setDefaultLanguage($config->get('language.default'));
-        $this->setLanguage($config->get('language.default'));
-        $languages = $config->get('language.languages');
+        $this->setContainer($container);
+        $this->setDefaultLanguage($this->getContainer()->getConfig()->get('language.default'));
+        $this->setLanguage($this->getContainer()->getConfig()->get('language.default'));
+        $languages = $this->getContainer()->getConfig()->get('language.languages');
         $this->setLanguages($languages);
     }
 
     /**
-     * @param Config $config
+     * @param ContainerInterface|Container $container
      * @return $this
      */
-    public function setConfig(Config $config)
+    public function setContainer(ContainerInterface $container)
     {
-        $this->config = $config;
+        $this->container = $container;
         return $this;
     }
 
     /**
-     * @return Config
+     * @return ContainerInterface|Container
      */
-    public function getConfig()
+    public function getContainer()
     {
-        return $this->config;
+        return $this->container;
     }
 
     /**

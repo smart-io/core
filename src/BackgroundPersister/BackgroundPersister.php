@@ -3,7 +3,8 @@
 namespace Smart\Core\BackgroundPersister;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Smart\Core\ContainerInterface;
+use Sinergi\Container\ContainerInterface;
+use Smart\Core\Container;
 
 // todo rename to database deferrer
 class BackgroundPersister
@@ -29,7 +30,7 @@ class BackgroundPersister
     private $mergeOrPersist = [];
 
     /**
-     * @param ContainerInterface $container
+     * @param ContainerInterface|Container $container
      */
     public function __construct(ContainerInterface $container)
     {

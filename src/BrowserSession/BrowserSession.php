@@ -5,7 +5,8 @@ namespace Smart\Core\BrowserSession;
 use Sinergi\BrowserSession\BrowserSessionController;
 use Sinergi\BrowserSession\CacheDriver\PredisDriver;
 use Sinergi\BrowserSession\RouterDriver\SinergiDriver;
-use Smart\Core\ContainerInterface;
+use Sinergi\Container\ContainerInterface;
+use Smart\Core\Container;
 
 class BrowserSession
 {
@@ -15,7 +16,7 @@ class BrowserSession
     private $controller;
 
     /**
-     * @param ContainerInterface $container
+     * @param ContainerInterface|Container $container
      */
     public function __construct(ContainerInterface $container)
     {

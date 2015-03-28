@@ -2,9 +2,9 @@
 
 namespace Smart\Core\VagrantCommand;
 
-use Smart\Core\Command;
-use Smart\Core\ContainerInterface;
-use Symfony\Component\Console\Command\Command as SymfonyCommand;
+use Smart\Core\Container;
+use Sinergi\Container\ContainerInterface;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -25,9 +25,9 @@ class VagrantCommand extends Command
 
     /**
      * @param ContainerInterface $container
-     * @param SymfonyCommand $command
+     * @param Command $command
      */
-    public function __construct(ContainerInterface $container, SymfonyCommand $command)
+    public function __construct(ContainerInterface $container, Command $command)
     {
         $this->command = $command;
         $this->container = $container;
@@ -121,7 +121,7 @@ class VagrantCommand extends Command
     }
 
     /**
-     * @return ContainerInterface
+     * @return Container
      */
     public function getContainer()
     {

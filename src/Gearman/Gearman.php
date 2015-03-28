@@ -1,17 +1,19 @@
 <?php
 
-namespace Smart\Core;
+namespace Smart\Core\Gearman;
 
 use Exception;
+use Sinergi\Container\ContainerInterface;
 use Sinergi\Gearman\Application;
 use Sinergi\Gearman\Config;
 use Sinergi\Gearman\Dispatcher;
 use Sinergi\Gearman\Process;
+use Smart\Core\Container;
 
 class Gearman
 {
     /**
-     * @var ContainerInterface
+     * @var ContainerInterface|Container
      */
     private $container;
 
@@ -36,7 +38,7 @@ class Gearman
     private $config;
 
     /**
-     * @param ContainerInterface $container
+     * @param ContainerInterface|Container $container
      */
     public function __construct(ContainerInterface $container)
     {
@@ -115,11 +117,18 @@ class Gearman
     public function getApplication()
     {
         if (null === $this->application) {
-            $this->setApplication(new Application($this->getConfig(), $this->getProcess(), null, $this->container->getGearmanLogger()));
+            $this->setApplication(
+                new Application(
+                    $this->getConfig(),
+                    $this->getProcess(),
+                    null,
+                    $this->container->getGearmanLogger()
+                )
+            );
         }
         try {
             $this->application->getWorker()->getWorker();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             null;
         }
         return $this->application;

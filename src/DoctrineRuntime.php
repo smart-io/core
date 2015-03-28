@@ -1,21 +1,20 @@
 <?php
 
-namespace Smart\Core\Doctrine;
+namespace Smart\Core;
 
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
-use Smart\Core\ContainerInterface;
-use Smart\Core\RuntimeInterface;
+use Sinergi\Container\ContainerInterface;
 use Symfony\Component\Console\Helper\HelperSet;
 
 class DoctrineRuntime implements RuntimeInterface
 {
     /**
-     * @var ContainerInterface
+     * @var ContainerInterface|Container
      */
     private $container;
 
     /**
-     * @param ContainerInterface $container
+     * @param ContainerInterface|Container $container
      */
     public function __construct(ContainerInterface $container)
     {

@@ -1,13 +1,15 @@
 <?php
 
-namespace Smart\Core;
+namespace Smart\Core\Predis;
 
 use Predis\Client;
+use Sinergi\Container\ContainerInterface;
+use Smart\Core\Container;
 
 class Predis
 {
     /**
-     * @var ContainerInterface
+     * @var Container
      */
     private $container;
 

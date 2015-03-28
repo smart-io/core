@@ -4,6 +4,9 @@ namespace Smart\Core;
 
 use Doctrine\ORM\EntityManager;
 use Psr\Log\LoggerInterface;
+use Router\Request;
+use Router\Response;
+use Router\Router;
 use Sinergi\Config\Config;
 use Smart\Core\Doctrine\Doctrine;
 use Sinergi\Dictionary\Dictionary;
@@ -11,11 +14,15 @@ use Sinergi\Gearman\Dispatcher as GearmanDispatcher;
 use Symfony\Component\Console\Application as ConsoleApplication;
 use Smart\Core\BrowserSession\BrowserSession;
 use Sinergi\BrowserSession\BrowserSessionController;
+use Sinergi\Container\ContainerInterface;
+use Smart\Core\Predis\Predis;
+use Smart\Core\Gearman\Gearman;
+use Smart\Core\Language\Language;
 
-trait ComponentRegistryTrait
+trait ComponentContainerTrait
 {
     /**
-     * @return ContainerInterface
+     * @return ContainerInterface|Container
      */
     abstract function getContainer();
 
@@ -72,7 +79,7 @@ trait ComponentRegistryTrait
     public function getLanguage()
     {
         if (!$this->getContainer()->get('language')) {
-            $this->getContainer()->set('language', new Language($this->getContainer()->getConfig()));
+            $this->getContainer()->set('language', new Language($this->getContainer()));
         }
         return $this->getContainer()->get('language');
     }
@@ -231,27 +238,6 @@ trait ComponentRegistryTrait
     }
 
     /**
-     * @return Annotation
-     */
-    public function getAnnotation()
-    {
-        if (!$annotation = $this->getContainer()->get('annotation')) {
-            $this->getContainer()->set('annotation', $annotation = new Annotation($this->getContainer()));
-        }
-        return $annotation;
-    }
-
-    /**
-     * @param Annotation $annotation
-     * @return $this
-     */
-    public function setAnnotation(Annotation $annotation)
-    {
-        $this->getContainer()->set('annotation', $annotation);
-        return $this;
-    }
-
-    /**
      * @return Serializer
      */
     public function getSerializer()
@@ -275,21 +261,22 @@ trait ComponentRegistryTrait
     /**
      * @return LoggerInterface
      */
-    public function getGearmanLogger()
+    public function getJobLogger()
     {
-        if (null === $this->getContainer()->get('gearmanLogger')) {
-            $this->getContainer()->set('gearmanLogger', new GearmanLogger($this->getContainer()));
+        if (!$jobLogger = $this->getContainer()->get('jobLogger')) {
+            $jobLogger = new JobLogger($this->getContainer());
+            $this->getContainer()->set('jobLogger', $jobLogger);
         }
-        return $this->getContainer()->get('gearmanLogger');
+        return $jobLogger;
     }
 
     /**
-     * @param LoggerInterface $gearmanLogger
+     * @param LoggerInterface $jobLogger
      * @return $this
      */
-    public function setGearmanLogger(LoggerInterface $gearmanLogger)
+    public function setJobLogger(LoggerInterface $jobLogger)
     {
-        $this->getContainer()->set('gearmanLogger', $gearmanLogger);
+        $this->getContainer()->set('jobLogger', $jobLogger);
         return $this;
     }
 
@@ -321,5 +308,99 @@ trait ComponentRegistryTrait
     public function getEntityManager($name = null)
     {
         return $this->getDoctrine()->getEntityManager($name);
+    }
+
+    /**
+     * @return Router
+     */
+    public function getRouter()
+    {
+        if (!$router = $this->getContainer()->get('router')) {
+            $router = new Router();
+            $this->getContainer()->set('router', $router);
+        }
+        return $router;
+    }
+
+    /**
+     * @param Router $router
+     * @return $this
+     */
+    public function setRouter(Router $router)
+    {
+        $this->getContainer()->set('router', $router);
+        return $this;
+    }
+
+    /**
+     * @return RouterApplication
+     */
+    public function getRouterApplication()
+    {
+        if (!$routerApplication = $this->getContainer()->get('routerApplication')) {
+            $routerApplication = new RouterApplication($this->getContainer());
+            $this->getContainer()->set('routerApplication', $routerApplication);
+        }
+        return $routerApplication;
+    }
+
+    /**
+     * @param RouterApplication $routerApplication
+     * @return $this
+     */
+    public function setRouterApplication(RouterApplication $routerApplication)
+    {
+        $this->getContainer()->set('routerApplication', $routerApplication);
+        return $this;
+    }
+
+    /**
+     * @return Request
+     * @deprecated
+     */
+    public function getRequest()
+    {
+        if (!$request = $this->getContainer()->get('request')) {
+            $request = Request::createFromGlobals();
+            $this->getContainer()->set('request', $request);
+        }
+        return $request;
+    }
+
+    public function getPsrRequest()
+    {
+        return $this->getRouter()->getRequest();
+    }
+
+    /**
+     * @param Request $request
+     * @return $this
+     */
+    public function setRequest(Request $request)
+    {
+        $this->getContainer()->set('request', $request);
+        return $this;
+    }
+
+    /**
+     * @return Response
+     */
+    public function getResponse()
+    {
+        if (!$response = $this->getContainer()->get('response')) {
+            $response = new Response;
+            $this->getContainer()->set('response', $response);
+        }
+        return $response;
+    }
+
+    /**
+     * @param Response $response
+     * @return $this
+     */
+    public function setResponse(Response $response)
+    {
+        $this->getContainer()->set('response', $response);
+        return $this;
     }
 }

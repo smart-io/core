@@ -2,16 +2,17 @@
 
 namespace Smart\Core;
 
+use Sinergi\Container\ContainerInterface;
 use Sinergi\Gearman\Command\RestartCommand;
 use Sinergi\Gearman\Command\StartCommand;
 use Sinergi\Gearman\Command\StopCommand;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
-class GearmanRuntime implements RuntimeInterface
+class JobRuntime implements RuntimeInterface
 {
     /**
-     * @var ContainerInterface
+     * @var Container
      */
     private $container;
 
@@ -25,7 +26,7 @@ class GearmanRuntime implements RuntimeInterface
 
     public function configure()
     {
-        $errorHandler = new ErrorHandler($this->container->getGearmanLogger());
+        $errorHandler = new ErrorHandler($this->container->getJobLogger());
         set_error_handler([$errorHandler, 'error']);
         set_exception_handler([$errorHandler, 'exception']);
         register_shutdown_function([$errorHandler, 'shutdown']);

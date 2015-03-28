@@ -2,7 +2,8 @@
 
 namespace Smart\Core;
 
-use Smart\Core\Twig\ContainerTwigExtension;
+use Sinergi\Container\ContainerInterface;
+use Sinergi\Container\Twig\ContainerTwigExtension;
 use Twig_Environment;
 use Twig_Extension_Debug;
 use Twig_Loader_Filesystem;
@@ -11,11 +12,11 @@ use Twig_Loader_String;
 class Twig
 {
     /**
-     * @var ContainerInterface
+     * @var Container
      */
     private $container;
 
-    /**
+    /**c
      * @var Twig_Environment
      */
     private $environment;
