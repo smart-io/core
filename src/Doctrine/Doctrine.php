@@ -24,6 +24,7 @@ use Exception;
 use Doctrine\Common\Cache\Cache;
 use Sinergi\Container\ContainerInterface;
 use Smart\Core\Container;
+use Smart\Core\SqlLogger;
 
 class Doctrine extends AbstractManagerRegistry
 {
