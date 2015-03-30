@@ -1,6 +1,6 @@
 <?php
 
-namespace Smart\Core;
+namespace Smart\Core\Twig;
 
 use Sinergi\Container\ContainerInterface;
 use Sinergi\Container\Twig\ContainerTwigExtension;
@@ -8,6 +8,7 @@ use Twig_Environment;
 use Twig_Extension_Debug;
 use Twig_Loader_Filesystem;
 use Twig_Loader_String;
+use Smart\Core\Container;
 
 class Twig
 {

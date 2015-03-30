@@ -4,6 +4,7 @@ namespace Smart\Core;
 
 use Doctrine\ORM\EntityManager;
 use Psr\Log\LoggerInterface;
+use Router\Application;
 use Router\Request;
 use Router\Response;
 use Router\Router;
@@ -11,6 +12,7 @@ use Sinergi\Config\Config;
 use Smart\Core\Doctrine\Doctrine;
 use Sinergi\Dictionary\Dictionary;
 use Sinergi\Gearman\Dispatcher as GearmanDispatcher;
+use Smart\Core\Twig\Twig;
 use Symfony\Component\Console\Application as ConsoleApplication;
 use Smart\Core\BrowserSession\BrowserSession;
 use Sinergi\BrowserSession\BrowserSessionController;
@@ -333,22 +335,22 @@ trait ComponentContainerTrait
     }
 
     /**
-     * @return RouterApplication
+     * @return Application
      */
     public function getRouterApplication()
     {
         if (!$routerApplication = $this->getContainer()->get('routerApplication')) {
-            $routerApplication = new RouterApplication($this->getContainer());
+            $routerApplication = new Application($this->getContainer()->getRouter());
             $this->getContainer()->set('routerApplication', $routerApplication);
         }
         return $routerApplication;
     }
 
     /**
-     * @param RouterApplication $routerApplication
+     * @param Application $routerApplication
      * @return $this
      */
-    public function setRouterApplication(RouterApplication $routerApplication)
+    public function setRouterApplication(Application $routerApplication)
     {
         $this->getContainer()->set('routerApplication', $routerApplication);
         return $this;
