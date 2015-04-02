@@ -26,6 +26,8 @@ abstract class App extends Application implements ApplicationInterface
 
     const DEFAULT_CONFIG_DIRECTORY = 'config';
 
+    const ROUTER_NO_DISPATCH = 'no_dispatch';
+
     /**
      * @var bool
      */
@@ -58,9 +60,11 @@ abstract class App extends Application implements ApplicationInterface
     protected function configure()
     {
         $config = $this->getContainer()->getConfig();
-        $config->getPaths()->add($this->getRootDir() . DIRECTORY_SEPARATOR . $this->getConfigDir());
+        $config->getPaths()->add($this->getRootDir() . DIRECTORY_SEPARATOR
+            . $this->getConfigDir());
         $config->setEnvironment($this->getEnv());
         $this->isConfigured = true;
+
         return $this;
     }
 
@@ -88,9 +92,11 @@ abstract class App extends Application implements ApplicationInterface
 
     /**
      * @param null|string $runtime
+     * @param array       $options
+     *
      * @return $this
      */
-    public function init($runtime = null)
+    public function init($runtime = null, array $options = [])
     {
         if (null === $runtime) {
             $runtime = $this->getRuntime();
@@ -99,15 +105,15 @@ abstract class App extends Application implements ApplicationInterface
         }
 
         if ($runtime === self::ROUTER_RUNTIME) {
-            $runtime = new RouterRuntime($this->getContainer());
+            $runtime = new RouterRuntime($this->getContainer(), $options);
         } elseif ($runtime === self::COMMAND_RUNTIME) {
-            $runtime = new CommandRuntime($this->getContainer());
+            $runtime = new CommandRuntime($this->getContainer(), $options);
         } elseif ($runtime === self::DOCTRINE_RUNTIME) {
-            $runtime = new DoctrineRuntime($this->getContainer());
+            $runtime = new DoctrineRuntime($this->getContainer(), $options);
         } elseif ($runtime === self::JOB_RUNTIME) {
-            $runtime = new JobRuntime($this->getContainer());
+            $runtime = new JobRuntime($this->getContainer(), $options);
         } elseif ($runtime === self::TEST_RUNTIME) {
-            $runtime = new TestRuntime($this->getContainer());
+            $runtime = new TestRuntime($this->getContainer(), $options);
         }
 
         if ($runtime) {
@@ -131,11 +137,13 @@ abstract class App extends Application implements ApplicationInterface
 
     /**
      * @param string $configDir
+     *
      * @return $this
      */
     public function setConfigDir($configDir)
     {
         $this->configDir = $configDir;
+
         return $this;
     }
 }

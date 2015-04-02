@@ -12,11 +12,20 @@ class RouterRuntime implements RuntimeInterface
     private $container;
 
     /**
-     * @param ContainerInterface $container
+     * @var array
      */
-    public function __construct(ContainerInterface $container)
-    {
+    private $options;
+
+    /**
+     * @param ContainerInterface $container
+     * @param array              $options
+     */
+    public function __construct(
+        ContainerInterface $container,
+        array $options = []
+    ) {
         $this->container = $container;
+        $this->options = $options;
     }
 
     public function configure()
@@ -30,7 +39,8 @@ class RouterRuntime implements RuntimeInterface
             error_reporting(E_ALL);
             ini_set('display_errors', "On");
         } else {
-            $errorHandler = new ErrorHandler($this->container->getErrorLogger());
+            $errorHandler
+                = new ErrorHandler($this->container->getErrorLogger());
             set_error_handler([$errorHandler, 'error']);
             set_exception_handler([$errorHandler, 'exception']);
             register_shutdown_function([$errorHandler, 'shutdown']);
@@ -39,9 +49,13 @@ class RouterRuntime implements RuntimeInterface
 
     public function run()
     {
-        $this->container->getRouter()->dispatch(
-            $this->container->getRequest(),
-            $this->container->getResponse()
-        );
+
+        if (!in_array(App::ROUTER_NO_DISPATCH, $this->options, true)) {
+
+            $this->container->getRouter()->dispatch(
+                $this->container->getRequest(),
+                $this->container->getResponse()
+            );
+        }
     }
 }
