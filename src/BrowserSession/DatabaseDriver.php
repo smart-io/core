@@ -2,9 +2,9 @@
 
 namespace Smart\Core\BrowserSession;
 
-use Sinergi\BrowserSession\BrowserSessionEntity;
-use Sinergi\BrowserSession\DatabaseDriver\DoctrineDriver;
 use Sinergi\Container\ContainerInterface;
+use Smart\BrowserSession\BrowserSessionEntity;
+use Smart\BrowserSession\DatabaseDriver\DoctrineDriver;
 use Smart\Core\Container;
 
 class DatabaseDriver extends DoctrineDriver
@@ -34,9 +34,12 @@ class DatabaseDriver extends DoctrineDriver
     /**
      * @param BrowserSessionEntity $browserSession
      */
-    public function mergeOrPersistBackground(BrowserSessionEntity $browserSession)
-    {
-        $this->container->getDoctrine()->mergeOrPersistBackground($this->getEntityManager(), $browserSession);
+    public function mergeOrPersistBackground(
+        BrowserSessionEntity $browserSession
+    ) {
+        $this->container->getDoctrine()
+            ->mergeOrPersistBackground($this->getEntityManager(),
+                $browserSession);
     }
 
     /**

@@ -2,10 +2,10 @@
 
 namespace Smart\Core\BrowserSession;
 
-use Sinergi\BrowserSession\BrowserSessionController;
-use Sinergi\BrowserSession\CacheDriver\PredisDriver;
-use Sinergi\BrowserSession\RouterDriver\SinergiDriver;
 use Sinergi\Container\ContainerInterface;
+use Smart\BrowserSession\BrowserSessionController;
+use Smart\BrowserSession\CacheDriver\PredisDriver;
+use Smart\BrowserSession\RouterDriver\SmartDriver;
 use Smart\Core\Container;
 
 class BrowserSession
@@ -22,7 +22,8 @@ class BrowserSession
     {
         $this->controller = new BrowserSessionController(
             new DatabaseDriver($container),
-            new SinergiDriver($container->getRouter(), $container->getRequest(), $container->getResponse()),
+            new SmartDriver($container->getRouter(), $container->getRequest(),
+                $container->getResponse()),
             new PredisDriver($container->getPredis()->getClient())
         );
     }
@@ -37,11 +38,13 @@ class BrowserSession
 
     /**
      * @param mixed $controller
+     *
      * @return $this
      */
     public function setController($controller)
     {
         $this->controller = $controller;
+
         return $this;
     }
 }
