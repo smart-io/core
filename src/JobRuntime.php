@@ -35,9 +35,13 @@ class JobRuntime implements RuntimeInterface
     public function run()
     {
         $daemon = true;
-        $command = $_SERVER['argv'][1];
-        if (stripos($_SERVER['argv'][2], '--daemon=') === 0) {
-            if ($_SERVER['argv'][2] === '--daemon=false' || $_SERVER['argv'][2] === '--daemon=0') {
+        $command = isset($_SERVER['argv'][1]) ? $_SERVER['argv'][1] : null;
+        if (isset($_SERVER['argv'][2])
+            && stripos($_SERVER['argv'][2], '--daemon=') === 0
+        ) {
+            if ($_SERVER['argv'][2] === '--daemon=false'
+                || $_SERVER['argv'][2] === '--daemon=0'
+            ) {
                 $daemon = false;
             }
         }
@@ -55,7 +59,8 @@ class JobRuntime implements RuntimeInterface
     {
         $command = new StopCommand();
         $command->setConfig($this->container->getGearman()->getConfig());
-        $command->setGearmanApplication($this->container->getGearman()->getApplication());
+        $command->setGearmanApplication($this->container->getGearman()
+            ->getApplication());
         $command->setProcess($this->container->getGearman()->getProcess());
         $command->run(new ArrayInput([]), new ConsoleOutput());
     }
@@ -72,7 +77,8 @@ class JobRuntime implements RuntimeInterface
             $command = new RestartCommand();
         }
         $command->setConfig($this->container->getGearman()->getConfig());
-        $command->setGearmanApplication($this->container->getGearman()->getApplication());
+        $command->setGearmanApplication($this->container->getGearman()
+            ->getApplication());
         $command->setProcess($this->container->getGearman()->getProcess());
         $command->setIsDaemon($daemon);
         $command->run(new ArrayInput([]), new ConsoleOutput());
