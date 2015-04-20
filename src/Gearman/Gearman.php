@@ -18,6 +18,11 @@ class Gearman
     private $container;
 
     /**
+     * @var string
+     */
+    private $bootstrap;
+
+    /**
      * @var Dispatcher
      */
     private $dispatcher;
@@ -46,12 +51,34 @@ class Gearman
     }
 
     /**
+     * @return string
+     */
+    public function getBootstrap()
+    {
+        return $this->bootstrap;
+    }
+
+    /**
+     * @param string $bootstrap
+     *
+     * @return $this
+     */
+    public function setBootstrap($bootstrap)
+    {
+        $this->bootstrap = $bootstrap;
+
+        return $this;
+    }
+
+    /**
      * @param Config $config
+     *
      * @return $this
      */
     public function setConfig(Config $config)
     {
         $this->config = $config;
+
         return $this;
     }
 
@@ -63,6 +90,7 @@ class Gearman
         if (null === $this->config) {
             $this->setConfig($this->createConfig());
         }
+
         return $this->config;
     }
 
@@ -74,7 +102,7 @@ class Gearman
         $config = $this->container->getConfig();
 
         return (new Config())
-            ->setBootstrap($this->container->getApp()->getRootDir() . '/bin/gearman.php')
+            ->setBootstrap($this->getBootstrap())
             ->addServers($config->get('gearman.servers'))
             ->setUser($config->get('gearman.user'))
             ->setAutoUpdate($config->get('gearman.auto_update'));
@@ -82,11 +110,13 @@ class Gearman
 
     /**
      * @param Dispatcher $dispatcher
+     *
      * @return $this
      */
     public function setDispatcher(Dispatcher $dispatcher)
     {
         $this->dispatcher = $dispatcher;
+
         return $this;
     }
 
@@ -96,18 +126,22 @@ class Gearman
     public function getDispatcher()
     {
         if (null === $this->dispatcher) {
-            $this->setDispatcher(new Dispatcher($this->getConfig(), $this->container->getGearmanLogger()));
+            $this->setDispatcher(new Dispatcher($this->getConfig(),
+                $this->container->getJobLogger()));
         }
+
         return $this->dispatcher;
     }
 
     /**
      * @param Application $application
+     *
      * @return $this
      */
     public function setApplication(Application $application)
     {
         $this->application = $application;
+
         return $this;
     }
 
@@ -116,13 +150,14 @@ class Gearman
      */
     public function getApplication()
     {
+
         if (null === $this->application) {
             $this->setApplication(
                 new Application(
                     $this->getConfig(),
                     $this->getProcess(),
                     null,
-                    $this->container->getGearmanLogger()
+                    $this->container->getJobLogger()
                 )
             );
         }
@@ -131,16 +166,19 @@ class Gearman
         } catch (Exception $e) {
             null;
         }
+
         return $this->application;
     }
 
     /**
      * @param Process $process
+     *
      * @return $this
      */
     public function setProcess(Process $process)
     {
         $this->process = $process;
+
         return $this;
     }
 
@@ -150,8 +188,10 @@ class Gearman
     public function getProcess()
     {
         if (null === $this->process) {
-            $this->setProcess(new Process($this->getConfig(), $this->container->getGearmanLogger()));
+            $this->setProcess(new Process($this->getConfig(),
+                $this->container->getJobLogger()));
         }
+
         return $this->process;
     }
 }
