@@ -27,7 +27,8 @@ class BrowserSession
                 $container->getRouter(), $container->getRequest(),
                 $container->getResponse()
             ),
-            new PredisDriver($container->getPredis()->getClient())
+            new PredisDriver($container->getPredis()->getClient()),
+            true
         );
     }
 
