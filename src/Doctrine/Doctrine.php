@@ -16,7 +16,6 @@ use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Doctrine\ORM\ORMException;
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
 use Doctrine\ORM\Tools\Setup;
-use Smart\Core\BackgroundPersister\BackgroundPersister;
 use Symfony\Component\Console\Command\Command as DoctrineCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\HelperSet;
@@ -56,11 +55,6 @@ class Doctrine extends AbstractManagerRegistry
     private $commands;
 
     /**
-     * @var BackgroundPersister
-     */
-    private $backgroundPersister;
-
-    /**
      * @var SqlLogger
      */
     private $sqlLogger;
@@ -95,48 +89,6 @@ class Doctrine extends AbstractManagerRegistry
         if ($defautName = $config->get('doctrine.default')) {
             $this->defautName = $defautName;
         }
-    }
-
-    /**
-     * @param EntityManagerInterface $entityManager
-     * @param $entity
-     * @return bool|null
-     */
-    public function persistBackground(EntityManagerInterface $entityManager, $entity)
-    {
-        if (null === $this->backgroundPersister) {
-            $this->backgroundPersister = new BackgroundPersister($this->container);
-        }
-        $this->backgroundPersister->persist($entityManager, $entity);
-        return true;
-    }
-
-    /**
-     * @param EntityManagerInterface $entityManager
-     * @param $entity
-     * @return bool|null
-     */
-    public function mergeBackground(EntityManagerInterface $entityManager, $entity)
-    {
-        if (null === $this->backgroundPersister) {
-            $this->backgroundPersister = new BackgroundPersister($this->container);
-        }
-        $this->backgroundPersister->merge($entityManager, $entity);
-        return true;
-    }
-
-    /**
-     * @param EntityManagerInterface $entityManager
-     * @param $entity
-     * @return bool|null
-     */
-    public function mergeOrPersistBackground(EntityManagerInterface $entityManager, $entity)
-    {
-        if (null === $this->backgroundPersister) {
-            $this->backgroundPersister = new BackgroundPersister($this->container);
-        }
-        $this->backgroundPersister->mergeOrPersist($entityManager, $entity);
-        return true;
     }
 
     /**
