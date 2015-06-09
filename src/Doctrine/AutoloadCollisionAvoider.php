@@ -94,7 +94,7 @@ class AutoloadCollisionAvoider
                 }
                 if ($tokens[$i][0] === T_CLASS || $tokens[$i][0] === T_INTERFACE) {
                     for ($j=$i+1;$j<count($tokens);$j++) {
-                        if ($tokens[$j] === '{') {
+                        if ($tokens[$j] === '{' && isset($tokens[$i+2][1])) {
                             $class = $tokens[$i+2][1];
                         }
                     }
