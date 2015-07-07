@@ -12,7 +12,7 @@
     "sinergi/security": "~0.1",
     "sinergi/sage50": "dev-develop",
     "smart/browser-session": "dev-develop",
-    "smart/emailqueue": "~0.1",
+    "smart/email-queue": "dev-develop",
     "gabrielbull/router": "dev-develop",
     "twig/twig": "~1.18",
     "symfony/console": "~2.6",
