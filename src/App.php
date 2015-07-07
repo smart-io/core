@@ -21,7 +21,7 @@ abstract class App extends Application implements ApplicationInterface
     const COMMAND_RUNTIME = 'command';
     const DOCTRINE_RUNTIME = 'doctrine';
     const ROUTER_RUNTIME = 'router';
-    const JOB_RUNTIME = 'job';
+    const WORKER_RUNTIME = 'worker';
     const TEST_RUNTIME = 'test';
 
     const DEFAULT_CONFIG_DIRECTORY = 'config';
@@ -93,8 +93,8 @@ abstract class App extends Application implements ApplicationInterface
     /**
      * @param null|string $runtime
      * @param array       $options
-     *
      * @return $this
+     * @throws \Exception
      */
     public function init($runtime = null, array $options = [])
     {
@@ -110,15 +110,18 @@ abstract class App extends Application implements ApplicationInterface
             $runtime = new CommandRuntime($this->getContainer(), $options);
         } elseif ($runtime === self::DOCTRINE_RUNTIME) {
             $runtime = new DoctrineRuntime($this->getContainer(), $options);
-        } elseif ($runtime === self::JOB_RUNTIME) {
-            $runtime = new JobRuntime($this->getContainer(), $options);
         } elseif ($runtime === self::TEST_RUNTIME) {
             $runtime = new TestRuntime($this->getContainer(), $options);
+        } elseif ($runtime instanceof RuntimeInterface) {
+            null;
+        } else {
+            throw new \Exception('Invalid runtime');
         }
 
         if ($runtime) {
             $runtime->configure();
         }
+
         $this->run();
         if ($runtime) {
             $runtime->run();

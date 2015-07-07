@@ -301,31 +301,6 @@ trait ComponentContainerTrait
     /**
      * @return LoggerInterface
      */
-    public function getJobLogger()
-    {
-        if (!$jobLogger = $this->getContainer()->get('jobLogger')) {
-            $jobLogger = new JobLogger($this->getContainer());
-            $this->getContainer()->set('jobLogger', $jobLogger);
-        }
-
-        return $jobLogger;
-    }
-
-    /**
-     * @param LoggerInterface $jobLogger
-     *
-     * @return $this
-     */
-    public function setJobLogger(LoggerInterface $jobLogger)
-    {
-        $this->getContainer()->set('jobLogger', $jobLogger);
-
-        return $this;
-    }
-
-    /**
-     * @return LoggerInterface
-     */
     public function getErrorLogger()
     {
         if (null === $this->getContainer()->get('errorLogger')) {
