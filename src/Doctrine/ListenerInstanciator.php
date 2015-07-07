@@ -4,8 +4,6 @@ namespace Smart\Core\Doctrine;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Sinergi\Container\ContainerInterface;
-use Smart\Core\EmailQueue\Config;
-use Smart\EmailQueue\Database\Doctrine\MappingListener as EmailQueueMappingListener;
 use Smart\Core\Container;
 
 class ListenerInstanciator
@@ -28,9 +26,5 @@ class ListenerInstanciator
      */
     public function instanciate(EntityManagerInterface $entityManager)
     {
-        $evm = $entityManager->getEventManager();
-        $evm->addEventListener('loadClassMetadata', new EmailQueueMappingListener(
-            new Config($this->container->getConfig())
-        ));
     }
 }
