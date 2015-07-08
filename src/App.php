@@ -115,7 +115,7 @@ abstract class App extends Application implements ApplicationInterface
         } elseif ($runtime instanceof RuntimeInterface) {
             null;
         } else {
-            throw new \Exception('Invalid runtime');
+            $runtime = null;
         }
 
         if ($runtime) {
