@@ -8,7 +8,7 @@ use Router\Application;
 use Router\Request;
 use Router\Response;
 use Router\Router;
-use Sinergi\Config\Config;
+use Sinergi\Config\Collection as Config;
 use Smart\BrowserSession\BrowserSessionController;
 use Smart\Core\Doctrine\Doctrine;
 use Sinergi\Dictionary\Dictionary;
@@ -64,7 +64,7 @@ trait ComponentContainerTrait
     public function getConfig()
     {
         if (null === $this->getContainer()->get('config')) {
-            $this->getContainer()->set('config', new Config());
+            $this->getContainer()->set('config', Config::factory());
         }
 
         return $this->getContainer()->get('config');

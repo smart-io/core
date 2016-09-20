@@ -3,7 +3,7 @@
 namespace Smart\Core\EmailQueue;
 
 use Smart\EmailQueue\ConfigInterface;
-use Sinergi\Config\Config as SinergiConfig;
+use Sinergi\Config\Collection as SinergiConfig;
 
 class Config implements ConfigInterface
 {

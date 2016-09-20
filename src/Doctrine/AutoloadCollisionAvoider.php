@@ -2,7 +2,7 @@
 
 namespace Smart\Core\Doctrine;
 
-use Sinergi\Config\Config;
+use Sinergi\Config\Collection as Config;
 
 class AutoloadCollisionAvoider
 {
